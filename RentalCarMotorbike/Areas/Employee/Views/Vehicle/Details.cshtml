@@ -1,0 +1,86 @@
+﻿@model RentalCarMotorbike.Models.Vehicle
+
+@{
+    ViewBag.Title = "Vehicle Details";
+}
+
+<div>
+    <h2>Detail About @Model.VehicleName</h2>
+    <dl class="table-dl dl-horizontal">
+        @if (@Model.VehicleModel == "Car")
+        {
+            <dd>
+                <img src='~/Content/Image/Upload/Cars/@Model.VehicleImage' style="width:500px; height:auto" />
+            </dd>
+        }
+        else
+        {
+            <dd>
+                <img src='~/Content/Image/Upload/Motorbikes/@Model.VehicleImage' style="width:500px; height:auto" />
+            </dd>
+        }
+
+        <dt>
+            @Html.DisplayNameFor(model => model.VehicleName)
+        </dt>
+
+        <dd class="dt-vehicle-name">
+            @Html.DisplayFor(model => model.VehicleName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.VehicleFlatNumber)
+        </dt>
+
+        <dd class="dt-vehicle-flat">
+            @Html.DisplayFor(model => model.VehicleFlatNumber)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.VehiclePrice)
+        </dt>
+
+        <dd class="dt-vehicle-price">
+            @Html.DisplayFor(model => model.VehiclePrice)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.VehicleInventory)
+        </dt>
+
+        @if (@Model.VehicleInventory.ToString() == "True")
+        {
+            <dd class="dt-vehicle-inventory">
+                Qualified
+            </dd>
+         }
+         else
+         {
+                <dd class="dt-vehicle-inventory">
+                    Not Qualified
+                </dd>
+          }
+
+
+        <dt>
+            @Html.DisplayNameFor(model => model.VehicleModel)
+        </dt>
+        <dd class="dt-vehicle-model">
+            @Html.DisplayFor(model => model.VehicleModel)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.VehicleStatus)
+        </dt>
+        <dd class="dt-vehicle-status">
+            @Html.DisplayFor(model => model.VehicleStatus)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.VehicleDescription)
+        </dt>
+        <dd class="dt-vehicle-desc">
+            @Html.DisplayFor(model => model.VehicleDescription)
+        </dd>
+    </dl>
+</div>
+
+@Html.ActionLink("Back to renting", "Index", "Rent", null, new { @class = "back-to-vehicle-list btn btn-primary" })
+
+

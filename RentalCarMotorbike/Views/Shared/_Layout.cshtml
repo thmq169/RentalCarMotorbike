@@ -1,0 +1,130 @@
+﻿@{ 
+
+    if (Session["userID"] == null)
+    {
+        Response.Redirect("~/Authent/Login");
+    }
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/Content/font-awesome.min.css")
+    @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/user.css")
+    @Styles.Render("~/Content/w3.css")
+    @Styles.Render("~/Content/details.css")
+    @Styles.Render("~/Content/main.css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body id="page-top">
+
+    <div class="navbar navbar-custom navbar-fixed-top" role="navigation" style="color: black; box-shadow: 0 1px 5px rgb(104 104 104 / 80%); background:#fff">
+        <div class="container" style="display: flex; justify-content: start; align-items: end;">
+            <div class="navbar-header">
+                @Html.ActionLink("RenTals", "Index", "Home", null, new { @class = " page-scroll logo" })
+
+            </div>
+
+            @if (User.Identity.IsAuthenticated)
+            {
+                if (Session["userID"] != null)
+                {
+                    <div class="collapse navbar-collapse navbar-right navbar-main-collapse" style="margin-left: auto;">
+                        <ul class="nav navbar-nav">
+                            <li>@Html.ActionLink("Cars", "Index", "Car")</li>
+                            <li>@Html.ActionLink("Motorbikes", "Index", "Motorbike")</li>
+                            <li>
+                                <a href="#"><span class="glyphicon glyphicon-user"></span> Welcome @User.Identity.Name </a>
+                            </li>
+                            <ul class="nav navbar-nav">
+                                <li>
+                                    <a href="#" class="dropdown-toggle active" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> Garagge <span class="caret"></span> </a>
+                                    <ul class="dropdown-menu">
+                                        <li>@Html.ActionLink("My Renting", "Renting", "Customer", new { id = @Session["userID"] }, null)</li>
+                                        <li>@Html.ActionLink("My Returned", "Rented", "Customer", new { id = @Session["userID"] }, null)</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                            <li>
+                                @Html.ActionLink("Logout", "Logout", "Authent")
+                            </li>
+                        </ul>
+                    </div>
+                }
+                @*if (Session["empID"] != null)
+                    {
+                        <div class="collapse navbar-collapse navbar-right navbar-main-collapse" style="margin-left: auto;">
+                            <ul class="nav navbar-nav">
+                                <li>@Html.ActionLink("Vehicles", "Index", "Vehicle",null, new { area = "Employee" })</li>
+                                <li>@Html.ActionLink("Customers", "Index", "Customer",null, new { area = "Employee" })</li>
+                                <li>@Html.ActionLink("Rent", "Index", "Rent",null, new {area = "Employee"})</li>
+                                <li>
+                                    <a href="#"><span class="glyphicon glyphicon-user"></span> Welcome @User.Identity.Name </a>
+                                </li>
+                                <li>
+                                    @Html.ActionLink("Logout", "Logout","Home",null, new {area = "Employee"})
+                                </li>
+                            </ul>
+                        </div>
+                    }*@
+            }
+            else
+            {
+                <div class="collapse navbar-collapse navbar-right navbar-main-collapse" style="margin-left: auto;">
+                    <ul class="nav navbar-nav">
+                        <li>
+                            <a href="index.php">Home</a>
+                        </li>
+                        <li>
+                            <a href="clientlogin.php">Employee</a>
+                        </li>
+                        <li>
+                            <a href="customerlogin.php">Customer</a>
+                        </li>
+                        <li>
+                            @Html.ActionLink("Login", "Login", "Authent")
+                        </li>
+                    </ul>
+                </div>
+            }
+        </div>
+    </div>
+
+
+    <div class="container body-content" style="margin-top:50px;">
+        @RenderBody()
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    <script type="text/javascript">
+            $(document).ready(function () {
+                function contain(text_one, text_two) {
+                    if (text_one.indexOf(text_two) != -1) {
+                        return true;
+                    }
+                }
+                $("#search").keyup(function () {
+                    const searchValue = $("#search").val().toLowerCase();
+                    $(".data").each(function () {
+                        if (!contain($(this).text().toLowerCase(), searchValue)) {
+                            $(this).hide()
+                        }
+                        else {
+                            $(this).show()
+                        }
+
+                    })
+                })
+            })
+        function preventBack() { window.history.forward() }
+        setTimeout(preventBack(), 0);
+        window.onunload = function () { null };
+    </script>
+    @RenderSection("scripts", required: false)
+</body>
+</html>

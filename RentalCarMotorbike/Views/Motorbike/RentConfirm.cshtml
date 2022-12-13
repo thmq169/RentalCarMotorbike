@@ -1,0 +1,78 @@
+﻿@model RentalCarMotorbike.ViewModel.ViewModels
+
+@{
+    ViewBag.Title = "Motorbike RentConfirm";
+    
+}
+<div class="container" style="padding: 0">
+    <div class="jumbotron">
+        <h1 class="text-center" style="color: green;"><span class="glyphicon glyphicon-ok-circle"></span> Renting Confirmed.</h1>
+    </div>
+</div>
+<br>
+
+<h2 class="text-center"> Thank you for using Car/Motorbike Rental System! We wish you have a safe ride. </h2>
+
+<div class="container">
+    <div class="box">
+        <div class="col-md-10" style="float: none; margin: 0 auto; text-align: center;">
+            <h3 style="color: orange;">Your booking has been received and placed into out order processing system.</h3>
+            <br>
+            <h3 style="color: orange;">Your Invoice</h3>
+            <br>
+        </div>
+        <div class="col-md-10" style="float: none; margin: 0 auto; ">
+            <table class="table-data" style="margin:0 auto">
+                <tr>
+                    <td><h4> <strong>Vehicle Name: </strong> </h4></td>
+                    <td>@Model.vehicle.VehicleName</td>
+                </tr>
+                <tr>
+                    <td><h4> <strong>Vehicle Model: </strong> </h4></td>
+                    <td>@Model.vehicle.VehicleModel</td>
+                </tr>
+                <tr>
+                    <td> <h4> <strong>Vehicle Flat Number:</strong></h4></td>
+                    <td>@Model.vehicle.VehicleFlatNumber</td>
+                </tr>
+                <tr>
+                    <td><h4> <strong>Vehicle Total Cost: </strong> </h4></td>
+                    <td>@Model.rent.RentTotalPrice</td>
+                </tr>
+                <tr>
+                    <td><h4> <strong>Start Date: </strong></h4></td>
+                    <td>@Model.rent.RentPickUpDate</td>
+                </tr>
+                <tr>
+                    <td><h4> <strong>Return Date: </strong></h4></td>
+                    <td>@Model.rent.RentReturnDate</td>
+                </tr>
+                <tr>
+                    <td><h4> <strong>Customer ID: </strong> </h4></td>
+                    <td>@Model.customer.CustomerID</td>
+                </tr>
+                <tr>
+                    <td><h4> <strong>Customer Name: </strong> </h4></td>
+                    <td>@Model.customer.CustomerName</td>
+                </tr>
+                <tr>
+                    <td><h4> <strong>Customer Email: </strong></h4></td>
+                    <td>@Model.customer.CustomerEmail</td>
+                </tr>
+                <tr>
+                    <td><h4> <strong>Customer Contact: </strong></h4></td>
+                    <td>@Model.customer.CustomerPhone</td>
+                </tr>
+                <tr>
+                    <td><h4> <strong>Customer Addess:</strong> </h4></td>
+                    <td>@Model.customer.CustomerAddress</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>@Html.ActionLink("Back To Home","Index","Motorbike", null, new { @class = "btn btn-primary" }) </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,165 @@
+﻿@model RentalCarMotorbike.Models.Customer
+
+@{
+    ViewBag.Title = "Customer Details";
+}
+
+
+@{
+    Layout = "~/Areas/Manager/Views/Shared/_Layout.cshtml";
+}
+
+@*Delete Customer Modal*@
+<div id="delete-customer" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Delete Customer</h4>
+            </div>
+            <div class="modal-body">
+                <p>Do you want to delete <strong id="customerDeleteName"></strong> (<strong id="customerDeletePhone"></strong>) ?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default submit-delete-customer">Delete</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div id="change-password" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Change Password</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="new-password">New Password:</label>
+                    <input type="text" class="form-control" name="new-password" id="new-password">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default change-password-submit">Change</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div>
+    <h2>Details About @Model.CustomerName</h2>
+    <hr />
+    <dl class="table-dl dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.CustomerName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CustomerName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CustomerEmail)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CustomerEmail)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CustomerAddress)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CustomerAddress)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CustomerPhone)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CustomerPhone)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.CustomerCreateAt)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CustomerCreateAt)
+        </dd>
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-warning" })
+    <button type="button" data-toggle="modal" data-target="#change-password" class="btn btn-info change-password">Change Password</button>
+    <button type="button" class="btn btn-danger delete-customer" data-id="@Model.CustomerID" data-name="@Model.CustomerName" data-phone="@Model.CustomerPhone">Delete</button>
+</p>
+
+@section Scripts{
+    <script type="text/javascript">
+
+        $(function () {
+
+            $(".delete-customer").click(function () {
+                $("#customerDeleteName").text($(this).data("name"))
+                $("#customerDeletePhone").text($(this).data("phone"))
+                $('#delete-customer').modal('show')
+                $('.submit-delete-customer').attr('data-id', $(this).data("id"))
+            })
+
+            $(".submit-delete-customer").click(function () {
+                const idDeleteCustomer = $(this).data("id")
+                const urlAction = '@Url.Action("Delete")'
+                console.log(urlAction + "/" + idDeleteCustomer)
+                $.ajax({
+                    type: "POST",
+                    url: urlAction + "/" + idDeleteCustomer,
+                    data: idDeleteCustomer,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: function (data) {
+
+                        localStorage.setItem("Delete", data.Msg)
+                        $("#delete-customer").modal("hide")
+
+                    },
+                    error: function () {
+                        alert("Error while inserting data");
+                    }
+                })
+            })
+
+            $(".change-password-submit").click(function () {
+                const newPassWord = $("#new-password").val();
+                const urlAction = '@Url.Action("ChangePassword")'
+                const formData = new FormData();
+                formData.append("new-password", newPassWord)
+                $.ajax({
+                    type: "POST",
+                    url: urlAction + "/" + '@Model.CustomerID',
+                    data: formData,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: function (data) {
+
+                        localStorage.setItem("Change Password", data.Msg)
+                        $("#change-password").modal("hide")
+
+                    },
+                    error: function () {
+                        alert("Change Password Failed");
+                    }
+                })
+
+            })
+        })
+    </script>
+
+}

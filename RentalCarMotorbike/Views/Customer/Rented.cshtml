@@ -1,0 +1,72 @@
+﻿@model RentalCarMotorbike.ViewModel.ViewModels
+
+@using System;
+@{
+    ViewBag.Title = "Customer Rented";
+
+}
+
+@if (Model.Rent.Count > 0)
+{
+    <div class="container" style="padding: 0">
+        <div class="jumbotron" style="background: #f0ad4e">
+            <h1 class="text-center">Your Returned Renting</h1>
+            <p class="text-center"> Hope you enjoyed our service </p>
+        </div>
+        <div class="table">
+            <table class="table table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Rent Status</th>
+                        <th>Vehicle Name</th>
+                        <th>Vehicle Flat</th>
+                        <th>Vehicle Model</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Cost</th>
+                        <th>Number of Days</th>
+                        <th>Total Cost</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < Model.Rent.Count; i++)
+                    {
+
+                        DateTime FromYear = Convert.ToDateTime(Model.Rent[i].RentPickUpDate);
+                        DateTime ToYear = Convert.ToDateTime(Model.Rent[i].RentReturnDate);
+
+                        TimeSpan objTimeSpan = ToYear - FromYear;
+                        double Days = Convert.ToDouble(objTimeSpan.TotalDays);
+
+                        <tr>
+                            <td>@Model.Rent[i].RentStatus</td>
+                            <td>@Model.Vehicle[i].VehicleName</td>
+                            <td>@Model.Vehicle[i].VehicleFlatNumber</td>
+                            <td>@Model.Vehicle[i].VehicleModel</td>
+                            <td>@Model.Rent[i].RentPickUpDate</td>
+                            <td>@Model.Rent[i].RentReturnDate</td>
+                            <td>@Model.Vehicle[i].VehiclePrice</td>
+                            <td>@Days</td>
+                            <td>@Model.Rent[i].RentTotalPrice</td>
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+}
+else
+{
+
+<div class="container" style="padding:0">
+    <div class="jumbotron" style="background: #f0ad4e">
+        <h1 class="text-center">You have not rented any cars till now!</h1>
+        <p class="text-center"> Please rent cars in order to view your data here. </p>
+    </div>
+</div>
+ }
+
+
+

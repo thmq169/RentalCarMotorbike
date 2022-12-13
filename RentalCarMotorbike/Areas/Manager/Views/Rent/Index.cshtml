@@ -1,0 +1,204 @@
+﻿@model RentalCarMotorbike.ViewModel.ViewModels
+
+@{
+    ViewBag.Title = "Renting";
+}
+
+@{
+    Layout = "~/Areas/Manager/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Renting Management</h2>
+
+@*<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#create-rent">Create New Rent</button>
+<div id="create-rent" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Create New Rent</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="customer-identity-rent">Customer Identity:</label>
+                    <input type="text" class="form-control" name="customer-identity-rent" id="customer-identity-rent">
+                </div>
+                <div class="form-group">
+                    <label for="customer-name-rent">Customer Name:</label>
+                    <input type="text" class="form-control" name="customer-name-rent" id="customer-name-rent">
+                </div>
+                <div class="form-group">
+                    <label for="customer-email-rent">Customer Email:</label>
+                    <input type="email" class="form-control" name="customer-email-rent" id="customer-email-rent">
+                </div>
+                <div class="form-group">
+                    <label for="vehicle-flat-rent">Vehicle Flat Number:</label>
+                    <input type="text" class="form-control" name="vehicle-flat-rent" id="vehicle-flat-rent">
+                </div>
+                <div class="form-group">
+                    <label for="vehicle-name-rent">Vehicle Name:</label>
+                    <input type="text" class="form-control" name="vehicle-name-rent" id="vehicle-name-rent">
+                </div>
+                <div class="form-group">
+                    <label for="vehicle-model-rent">Vehicle Model:</label>
+                    <select id="vehicle-model-rent">
+                        <option value="Car">Car</option>
+                        <option value="Motorbike">Motorbike</option>
+                    </select>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button class="create-rent">Create New Rent</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>*@
+<table class="table" style=" margin-top: 20px; ">
+    <tr>
+        <th>
+            Rent Code
+        </th>
+        <th>
+            Vehicle Name
+        </th>
+        <th>
+            Vehicle Model
+        </th>
+        <th>
+            Customer Rent
+        </th>
+        <th>
+            Phone Rent
+        </th>
+        <th>Action</th>
+    </tr>
+
+    @for (int i = 0; i < Model.Rent.Count; i++)
+    {
+        <tr class="data">
+            <td>
+                @Model.Rent[i].RentID
+            </td>
+            <td>
+                @Model.Vehicle[i].VehicleName
+            </td>
+            <td>
+                @Model.Vehicle[i].VehicleModel
+            </td>
+            <td>
+                @Model.Customer[i].CustomerName
+            </td>
+            <td>
+                @Model.Customer[i].CustomerPhone
+            </td>
+            <td>
+                @*@Html.ActionLink("Edit", "Edit", new { id = Model.Rent[i].RentID }) | *@
+                @Html.ActionLink("Details", "Details", new { id = i, e = Model.Rent[i].RentID }, new { @class = "btn btn-warning" })
+                @*@Html.ActionLink("Delete", "Delete", new { id = i,e = Model.Rent[i].RentID }, new { @class = "btn btn-danger" })*@
+            </td>
+        </tr>
+    }
+
+</table>
+
+@*@section Scripts{
+    <script type="text/javascript">
+
+        $(function () {
+            $(".create-rent").click(function () {
+                const formData = new FormData();
+                formData.append("customer-identity-rent", $("#customer-identity-rent").val())
+                formData.append("customer-name-rent", $("#customer-name-rent").val())
+                formData.append("customer-email-rent", $("#customer-email-rent").val())
+                formData.append("vehicle-flat-rent", $("#vehicle-flat-rent").val())
+                formData.append("vehicle-name-rent", $("#vehicle-name-rent").val())
+                formData.append("vehicle-model-rent", $("#vehicle-model-rent").val())
+
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("Create")',
+                    data: formData,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: function (data) {
+                        localStorage.setItem("Message", data.Msg)
+
+                        $("#create-customer").modal("hide")
+                    },
+                    error: function () {
+                        alert("Error while inserting data");
+                    }
+                });
+
+            })
+
+            $(".edit-customer").click(function () {
+                $('#edit-customer').modal('show')
+                $('.submit-edit-customer').attr('data-id', $(this).data("id"))
+            })
+
+
+            $(".submit-edit-customer").click(function () {
+                var formData = new FormData();
+                //formData.append("email", $("#email-edit").val())
+                //formData.append("password", $("#pwd-edit").val())
+                const idCustomer = $(this).data("id")
+                const urlAction = '@Url.Action("Edit")'
+                console.log(urlAction + "/" + idCustomer)
+                $.ajax({
+                    type: "POST",
+                    url: urlAction + "/" + idCustomer,
+                    data: formData,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: function (data) {
+
+                        localStorage.setItem("Message", data.Msg)
+                        $("#edit-customer").modal("hide")
+
+                    },
+                    error: function () {
+                        alert("Error while inserting data");
+                    }
+                })
+            })
+
+            $(".delete-customer").click(function () {
+                $("#customerDeleteName").text($(this).data("name"))
+                $("#customerDeletePhone").text($(this).data("phone"))
+                $('#delete-customer').modal('show')
+                $('.submit-delete-customer').attr('data-id', $(this).data("id"))
+            })
+
+            $(".submit-delete-customer").click(function () {
+
+                const idDeleteCustomer = $(this).data("id")
+                const urlAction = '@Url.Action("Delete")'
+                console.log(urlAction + "/" + idDeleteCustomer)
+                $.ajax({
+                    type: "POST",
+                    url: urlAction + "/" + idDeleteCustomer,
+                    data: idDeleteCustomer,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: function (data) {
+
+                        localStorage.setItem("Delete", data.Msg)
+                        $("#delete-customer").modal("hide")
+
+                    },
+                    error: function () {
+                        alert("Error while inserting data");
+                    }
+                })
+            })
+        })
+    </script>
+
+}*@

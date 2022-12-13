@@ -1,0 +1,53 @@
+﻿@model IEnumerable<RentalCarMotorbike.Models.Customer>
+
+@{
+    ViewBag.Title = "Customers";
+}
+@{
+    Html.RenderPartial("_Search");
+}
+<h2>Customer Management</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.CustomerName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CustomerEmail)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CustomerAddress)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CustomerPhone)
+            </th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody class="table-body">
+        @foreach (var item in Model)
+        {
+            <tr class="data">
+                <td>
+                    @Html.DisplayFor(modelItem => item.CustomerName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CustomerEmail)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CustomerAddress)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CustomerPhone)
+                </td>
+
+                <td>
+                    @Html.ActionLink("More details", "Details", new { id = item.CustomerID }, new { @class = "btn btn-warning" })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+

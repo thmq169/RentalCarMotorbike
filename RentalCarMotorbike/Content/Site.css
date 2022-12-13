@@ -1,0 +1,42 @@
+﻿/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+    text-align:left !important;
+    font-size:18px;
+    width:200px;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+
+
+.navbar-inverse .navbar-toggle:hover,
+.navbar-inverse .navbar-toggle:focus {
+    background-color: #777;
+    border-color: #fff
+}
+
+.table-data {
+    width:40%;
+
+}
+
+.table-dl dd:first-child{
+    margin-left:0;
+}
+
+.table-dl dt, .table-dl dd, .table-data td {
+        padding: 10px 0;
+    }
+
+.table-data tr td:first-child {
+    font-weight: bold;
+    font-size:18px;
+}

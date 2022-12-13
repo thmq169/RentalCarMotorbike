@@ -1,0 +1,93 @@
+﻿@model RentalCarMotorbike.Models.Vehicle
+
+@{
+    ViewBag.Title = "Car Details";
+}
+
+<div class="container" style="padding: 0">
+    
+    <div class="box">
+        <div style="display:flex; justify-content:space-between;">
+            @Html.ActionLink("Back", "Index", "Car", new { id = @Model.VehicleID }, new { @class = "btn btn-warning" })
+            @Html.ActionLink("Rent", "Rent", "Car", new { id = @Model.VehicleID}, new { @class = "btn btn-warning" })
+        </div>
+        <div class="col-md-10" style="float: none; margin: 0 auto; text-align: center;">
+            <h2 style="color: orange;">Detail About @Model.VehicleName </h2>
+            <br>
+
+        </div>
+        <div class="col-md-10" style="float: none; margin: 0 auto; ">
+            <dl class="table-dl dl-horizontal">
+
+                <dd>
+                    <img class="vehicle-image" style="width:500px;" src="~/Content/Image/Upload/Cars/@Model.VehicleImage" />
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.VehicleName):
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.VehicleName)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.VehiclePrice):
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.VehiclePrice)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.VehicleInventory):
+                </dt>
+
+                @if (@Model.VehicleInventory.ToString() == "True")
+                {
+                    <dd class="dt-vehicle-inventory">
+                        Qualified
+                    </dd>
+                }
+                else
+                {
+                    <dd class="dt-vehicle-inventory">
+                        Not Qualified
+                    </dd>
+                }
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.VehicleFlatNumber):
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.VehicleFlatNumber)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.VehicleModel):
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.VehicleModel)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.VehicleStatus):
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.VehicleStatus)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.VehicleDescription):
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.VehicleDescription)
+                </dd>
+
+            </dl>
+        </div>
+    </div>
+</div>

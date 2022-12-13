@@ -1,0 +1,246 @@
+﻿@model IEnumerable<RentalCarMotorbike.Models.Customer>
+
+@{
+    ViewBag.Title = "Customer";
+}
+
+@{
+    Layout = "~/Areas/Manager/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Customer Management</h2>
+@*Create Customer Modal*@
+<button type="button" class="btn btn-warning btn-lg" data-toggle="modal" data-target="#create-customer">Create New Customer</button>
+<div id="create-customer" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Create New Customer</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="customer-identity">Customer Identity:</label>
+                    <input type="text" class="form-control" name="customer-identity" id="customer-identity">
+                </div>
+                <div class="form-group">
+                    <label for="customer-name">Customer Name:</label>
+                    <input type="text" class="form-control" name="customer-name" id="customer-name">
+                </div>
+                <div class="form-group">
+                    <label for="customer-email">Customer Email:</label>
+                    <input type="email" class="form-control" name="customer-email" id="customer-email">
+                </div>
+                <div class="form-group">
+                    <label for="customer-password">Customer Password:</label>
+                    <input type="text" class="form-control" name="customer-password" id="customer-password">
+                </div>
+                <div class="form-group">
+                    <label for="customer-address">Customer Address:</label>
+                    <input type="text" class="form-control" name="customer-address" id="customer-address">
+                </div>
+                <div class="form-group">
+                    <label for="customer-phone">Customer Phone:</label>
+                    <input type="text" class="form-control" name="customer-phone" id="customer-phone">
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button class="create-customer">Create New Customer</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@*Edit Customer Modal*@
+<div id="edit-customer" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Modal Header</h4>
+            </div>
+            <div class="modal-body">                    
+                    <div class="form-group">
+                        <label for="email-edit-customer">Email address:</label>
+                        <input type="text" class="form-control" name="email-edit-customer" id="email-edit-customer">
+                    </div>
+                    <div class="form-group">
+                        <label for="pwd-edit-customer">Password:</label>
+                        <input type="text" class="form-control" name="pwd-edit-customer" id="pwd-edit-customer">
+                    </div>
+                    <button class="submit-edit-customer">Edit</button>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@*Delete Customer Modal*@
+<div id="delete-customer" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Modal Header</h4>
+            </div>
+            <div class="modal-body">
+                <p>Do you want to delete <strong id="customerDeleteName"></strong> (<strong id="customerDeletePhone"></strong>) ?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default submit-delete-customer">Delete</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+<table class="table" style=" margin-top: 20px; ">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.CustomerName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CustomerEmail)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CustomerAddress)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CustomerPhone)
+        </th>
+        <th>Action</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr class="data">
+            <td>
+                @Html.DisplayFor(modelItem => item.CustomerName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CustomerEmail)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CustomerAddress)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CustomerPhone)
+            </td>
+            
+            <td>
+                @*<button class="edit-customer" data-id="@item.CustomerID">Edit</button>*@
+                @Html.ActionLink("Details", "Details", new { id = item.CustomerID }, new {@class = "btn btn-warning"})
+                <button class="btn btn-danger delete-customer" data-id="@item.CustomerID" data-name="@item.CustomerName" data-phone="@item.CustomerPhone">Delete</button>
+            </td>
+        </tr>
+    }
+
+</table>
+
+@section Scripts{
+    <script type="text/javascript">
+
+        $(function () {
+            $(".create-customer").click(function () {
+                const formData = new FormData();
+                formData.append("customer-identity", $("#customer-identity").val())
+                formData.append("customer-name", $("#customer-name").val())
+                formData.append("customer-email", $("#customer-email").val())
+                formData.append("customer-password", $("#customer-password").val())
+                formData.append("customer-address", $("#customer-address").val())
+                formData.append("customer-phone", $("#customer-phone").val())
+
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("Create")',
+                    data: formData,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: function (data) {
+                        if (data.code === 0) {
+                            localStorage.setItem("Create Customer", data.message)
+                            window.location.reload()
+                        }
+                        
+                        $("#create-customer").modal("hide")
+                    },
+                    error: function () {
+                        alert("Error while inserting data");
+                    }
+                });
+
+            })
+
+            $(".edit-customer").click(function () {
+                $('#edit-customer').modal('show')
+                $('.submit-edit-customer').attr('data-id', $(this).data("id"))
+            })
+
+
+            $(".submit-edit-customer").click(function () {
+                var formData = new FormData();
+                //formData.append("email", $("#email-edit").val())
+                //formData.append("password", $("#pwd-edit").val())
+                const idCustomer = $(this).data("id")
+                const urlAction = '@Url.Action("Edit")'
+                console.log(urlAction + "/" + idCustomer)
+                $.ajax({
+                    type: "POST",
+                    url: urlAction + "/" + idCustomer,
+                    data: formData,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: function (data) {
+
+                        localStorage.setItem("Message", data.Msg)
+                        $("#edit-customer").modal("hide")
+
+                    },
+                    error: function () {
+                        alert("Error while inserting data");
+                    }
+                })
+            })
+
+            $(".delete-customer").click(function () {
+                $("#customerDeleteName").text($(this).data("name"))
+                $("#customerDeletePhone").text($(this).data("phone"))
+                $('#delete-customer').modal('show')
+                $('.submit-delete-customer').attr('data-id', $(this).data("id"))
+            })
+
+            $(".submit-delete-customer").click(function () {
+
+                const idDeleteCustomer = $(this).data("id")
+                const urlAction = '@Url.Action("Delete")'
+                console.log(urlAction + "/" + idDeleteCustomer)
+                $.ajax({
+                    type: "POST",
+                    url: urlAction + "/" + idDeleteCustomer,
+                    data: idDeleteCustomer,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: function (data) {
+
+                        localStorage.setItem("Delete", data.Msg)
+                        $("#delete-customer").modal("hide")
+                        window.location.reload()
+                    },
+                    error: function () {
+                        alert("Error while inserting data");
+                    }
+                })
+            })
+        })
+    </script>
+
+}

@@ -1,0 +1,98 @@
+﻿@model RentalCarMotorbike.ViewModel.ViewModels
+ @using System;
+@{
+    ViewBag.Title = "Return";
+    DateTime FromYear = Convert.ToDateTime(Model.rent.RentPickUpDate);
+    DateTime ToYear = Convert.ToDateTime(Model.rent.RentReturnDate);
+
+    TimeSpan objTimeSpan = ToYear - FromYear;
+    double Days = Convert.ToDouble(objTimeSpan.TotalDays);
+
+    ViewBag.Title = "Customer Return";
+}
+
+<div class="container" style="margin-top: 65px; padding: 0">
+    <div class="box" style="float: none; margin: 0 auto;">
+        <table>
+            <tr>
+                <td>Vehicle Name:</td>
+                <td>@Model.vehicle.VehicleName</td>
+            </tr>
+            <tr>
+                <td>Vehicle Flat:</td>
+                <td>@Model.vehicle.VehicleFlatNumber</td>
+            </tr>
+            <tr>
+                <td>Vehicle Model:</td>
+                <td>@Model.vehicle.VehicleModel</td>
+            </tr>
+            <tr>
+                <td>Start Date:</td>
+                <td>@Model.rent.RentPickUpDate</td>
+            </tr>
+            <tr>
+                <td>Return Date:</td>
+                <td>@Model.rent.RentReturnDate</td>
+            </tr>
+            <tr>
+                <td>Cost:</td>
+                <td>@Model.vehicle.VehiclePrice</td>
+            </tr>
+            <tr>
+                <td>Number of days:</td>
+                <td>@Days</td>
+            </tr>
+            <tr>
+                <td>Total Cost:</td>
+                <td>@Model.rent.RentTotalPrice</td>
+            </tr>
+
+            <tr>
+                <td></td>
+                <td><button id="return-now" class="btn btn-warning">Return Now</button> </td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+
+       $(document).ready( function() {
+           $("#return-now").click(function () {
+               const formData = new FormData();
+               formData.append("vehicle-id", "@Model.vehicle.VehicleID")
+               @*formData.append("vehicle-name", "@Model.vehicle.VehicleName")
+               formData.append("vehicle-flat", "@Model.vehicle.VehicleFlatNumber")
+               formData.append("vehicle-price", "@Model.vehicle.VehiclePrice")
+               formData.append("rent-start-date", @Model.rent.RentPickUpDate)
+               formData.append("rent-return-date", @Model.rent.RentReturnDate)
+               formData.append("rent-number-days", @numberDayRent)
+               formData.append("rent-total-cost", @Model.rent.RentTotalPrice)*@
+               formData.append("rent-id", "@Model.rent.RentID")
+
+               $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("Return")',
+                    data: formData,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: function (data) {
+                        if (data.code === 0) {
+                            localStorage.setItem("Return", data.message)
+                        }
+                        const idRent = data.idRent;
+                        const id = data.id;
+                        window.location.href = '@Url.Action("ReturnConfirm")' + "/" + id + "?idRent=" + idRent
+
+                    },
+                   error: function (data) {
+                       localStorage.setItem("Return", data.message)
+                    }
+                });
+           })
+        });
+    </script>
+}
+

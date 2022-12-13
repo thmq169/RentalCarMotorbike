@@ -1,0 +1,118 @@
+﻿@model RentalCarMotorbike.ViewModel.ViewModels
+
+@{
+    ViewBag.Title = "Motorbike Rent";
+    @*if (Session["RentConfirm"] != null)
+     {
+        Response.Redirect("~/Car/RentConfirm/" + Session["RentConfirm"]);
+     }*@
+}
+
+<div class="container" style="padding: 0">
+    <div class="box" style="float: none; margin: 0 auto;">
+        <div class="col-md-10" style="float: none; margin: 0 auto; text-align: center;">
+            <h2 style="color: orange;">Rent @Model.vehicle.VehicleName </h2>
+            <br>
+        </div>
+        <table class="table-data" style="margin: 0 auto; width:70%">
+            <tr>
+                <td>Vehicle Name:</td>
+                <td>@Model.vehicle.VehicleName</td>
+            </tr>
+            <tr>
+                <td>Vehicle Flat:</td>
+                <td>@Model.vehicle.VehicleFlatNumber</td>
+            </tr>
+            <tr>
+                <td>Vehicle Cost Rent:</td>
+                <td>@Model.vehicle.VehiclePrice</td>
+            </tr>
+            <tr>
+                <td>Start Date:</td>
+                <td><input type="date" id="rent_start_date" name="rent_start_date" min="" required=""></td>
+            </tr>
+            <tr>
+                <td>Return Date:</td>
+                <td><input type="date" id="rent_return_date" name="rent_return_date" min="" required=""></td>
+            </tr>
+            <tr>
+                <td>Customer ID:</td>
+                <td>@Model.customer.CustomerID</td>
+            </tr>
+            <tr>
+                <td>Customer Name:</td>
+                <td>@Model.customer.CustomerName</td>
+            </tr>
+            <tr>
+                <td>Customer Contact:</td>
+                <td>@Model.customer.CustomerPhone</td>
+            </tr>
+            <tr>
+                <td>Customer Address:</td>
+                <td>@Model.customer.CustomerAddress</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                    <button id="rent-now" class="btn btn-warning">Rent Now</button>
+                    @Html.ActionLink("Back to List", "Index", "Motorbike", null, new { @class = "btn btn-primary" })
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+
+       $(document).ready( function() {
+           $("#rent-now").click(function () {
+               const formData = new FormData();
+               formData.append("vehicle-id", "@Model.vehicle.VehicleID".replace(" ",""))
+               formData.append("vehicle-name", "@Model.vehicle.VehicleName")
+               formData.append("vehicle-flat", "@Model.vehicle.VehicleFlatNumber")
+               formData.append("vehicle-price", "@Model.vehicle.VehiclePrice")
+               formData.append("rent-start-date", $("#rent_start_date").val())
+               formData.append("rent-return-date", $("#rent_return_date").val())
+               formData.append("customer-id", "@Model.customer.CustomerID")
+               formData.append("customer-name", "@Model.customer.CustomerName")
+               formData.append("customer-phone", "@Model.customer.CustomerPhone")
+               formData.append("customer-address", "@Model.customer.CustomerAddress")
+
+               console.log(formData.get("customer-name"))
+               console.log(formData.get("vehicle-id"))
+               console.log(formData.get("vehicle-name"))
+               console.log(formData.get("vehicle-flat"))
+               console.log(formData.get("vehicle-price"))
+               console.log(formData.get("customer-id"))
+               console.log(formData.get("customer-phone"))
+               console.log(formData.get("rent-start-date"))
+               console.log(formData.get("rent-return-date"))
+               $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("Rent")',
+                    data: formData,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: function (data) {
+                        if (data.code === 0) {
+                            localStorage.setItem("Rent Sucess", data.message)
+                        }
+                        const id = data.idRent;
+                        window.location.href = '@Url.Action("RentConfirm")' + "/" + id
+
+                    },
+                   error: function (data) {
+                       
+                           localStorage.setItem("Rent failed", data.message)
+                       
+                        alert("Error while inserting data");
+                    }
+                });
+           })
+
+
+        });
+    </script>
+}

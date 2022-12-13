@@ -1,0 +1,216 @@
+﻿@model RentalCarMotorbike.ViewModel.ViewModels
+
+@{
+    ViewBag.Title = "Rent Details";
+}
+
+<div>
+    <dl class="dl-horizontal table-dl">
+        @if (@Model.vehicle.VehicleModel == "Car")
+        {
+            <dd style="margin-left:0">
+                <img src='~/Content/Image/Upload/Cars/@Model.vehicle.VehicleImage' style="width:500px;height:auto"/>
+            </dd>
+        }
+        else
+        {
+            <dd style="margin-left:0">
+                <img src='~/Content/Image/Upload/Motorbikes/@Model.vehicle.VehicleImage' style="width:500px;height:auto" />
+            </dd>
+        }
+        <dt>
+            @Html.DisplayNameFor(m => Model.vehicle.VehicleName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(m => Model.vehicle.VehicleName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(m => Model.vehicle.VehicleFlatNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(m => Model.vehicle.VehicleFlatNumber)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(m => Model.vehicle.VehiclePrice)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(m => Model.vehicle.VehiclePrice)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(m => Model.rent.RentPickUpDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(m => Model.rent.RentPickUpDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(m => Model.rent.RentReturnDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(m => Model.rent.RentReturnDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(m => Model.rent.RentTotalPrice)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(m => Model.rent.RentTotalPrice)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(m => Model.vehicle.VehicleInventory)
+        </dt>
+        <dd>
+            @if (@Model.vehicle.VehicleInventory.ToString() == "True")
+            {
+                <p>Qualified</p>
+            }
+            else
+            {
+                <p>Not Qualified</p>
+            }
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(m => Model.vehicle.VehicleModel)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(m => Model.vehicle.VehicleModel)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(m => Model.vehicle.VehicleStatus)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(m => Model.vehicle.VehicleStatus)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(m => Model.customer.CustomerName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(m => Model.customer.CustomerName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(m => Model.customer.CustomerEmail)
+        </dt>
+        <dd>
+            @Html.DisplayFor(m => Model.customer.CustomerEmail)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(m => Model.customer.CustomerPhone)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(m => Model.customer.CustomerPhone)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(m => Model.customer.CustomerAddress)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(m => Model.customer.CustomerAddress)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(m => Model.rent.RentStatus)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(m => Model.rent.RentStatus)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(m => Model.rent.RentCreatAt)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(m => Model.rent.RentCreatAt)
+        </dd>
+
+
+    </dl>
+</div>
+
+<p>
+    @Html.ActionLink("Back to renting", "Index", "Rent", null, new { @class = "btn btn-primary" })
+    @if (Model.rent.RentStatus.ToString() == "Returned")
+    {
+        @*<button class="btn btn-info return">Confirm Return</button>*@
+        @*<button class="btn btn-success view-confirm">See Confirm</button>*@
+        @Html.ActionLink("See Confirm", "ConfirmBill", "Rent", new { id = @Model.rent.RentID }, new { @class = "btn btn-success" })
+    }
+    else if (Model.rent.RentStatus.ToString() == "Renting" || Model.rent.RentStatus.ToString() == "Returning")
+    {
+        @Html.ActionLink("Return And See Confirm Bill", "ConfirmBill", "Rent", new { id = @Model.rent.RentID }, new { @class = "btn btn-success" })
+    }
+    else
+    {
+        @Html.ActionLink("Accept", "ConfirmBill", "Rent", new { id = @Model.rent.RentID }, new { @class = "btn btn-success" })
+        <button class="btn btn-danger decline">Decline</button>
+    }
+</p>
+
+@section Scripts{
+    <script type="text/javascript">
+
+        $(function () {
+            $(".accept").click(function () {
+                const formData = new FormData()
+                formData.append("id-rent","@Model.rent.RentID")
+                formData.append("id-customer","@Model.customer.CustomerID")
+                formData.append("id-vehicle", "@Model.vehicle.VehicleID")
+                formData.append("id-employee", "@Session["empID"]") // use session employee
+
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("Accept")',
+                    data: formData,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: function (data) {
+                        localStorage.setItem("Accept", data.Msg)
+                        window.location.href = '@Url.Action("Index")'
+                    },
+                    error: function () {
+                        alert("Error while inserting data");
+                    }
+                })
+            })
+
+            $(".decline").click(function () {
+                const formData = new FormData()
+                formData.append("id-rent","@Model.rent.RentID")
+                formData.append("id-customer","@Model.customer.CustomerID")
+                formData.append("id-vehicle","@Model.vehicle.VehicleID")
+                formData.append("id-employee", "@Session["empID"]") // use session employee
+
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("Decline")',
+                    data: formData,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: function (data) {
+                        localStorage.setItem("Decline", data.Msg)
+                         window.location.href = '@Url.Action("Index")'
+                    },
+                    error: function () {
+                        alert("Error while inserting data");
+                    }
+                })
+
+            })
+
+        })
+    </script>
+
+}

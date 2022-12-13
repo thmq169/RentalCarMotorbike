@@ -1,0 +1,366 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="RentalVehicalModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Admin">
+          <Key>
+            <PropertyRef Name="AdminID" />
+          </Key>
+          <Property Name="AdminID" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="AdminPassword" Type="nvarchar" MaxLength="100" />
+          <Property Name="AdminEmail" Type="varbinary" MaxLength="100" />
+          <Property Name="AdminName" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="Customer">
+          <Key>
+            <PropertyRef Name="CustomerID" />
+          </Key>
+          <Property Name="CustomerName" Type="nvarchar" MaxLength="200" />
+          <Property Name="CustomerEmail" Type="nvarchar" MaxLength="50" />
+          <Property Name="CustomerAddress" Type="ntext" />
+          <Property Name="CustomerPhone" Type="varchar" MaxLength="10" />
+          <Property Name="CustomerPassword" Type="nvarchar" MaxLength="100" />
+          <Property Name="CustomerCreateAt" Type="varchar" MaxLength="50" />
+          <Property Name="CustomerID" Type="varchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Employee">
+          <Key>
+            <PropertyRef Name="EmployeeID" />
+          </Key>
+          <Property Name="EmployeeID" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="EmployeeName" Type="nvarchar" MaxLength="100" />
+          <Property Name="EmployeeEmail" Type="nvarchar" MaxLength="100" />
+          <Property Name="EmployeePhone" Type="varchar" MaxLength="10" />
+          <Property Name="EmployeePassword" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="Rent">
+          <Key>
+            <PropertyRef Name="RentID" />
+          </Key>
+          <Property Name="RentID" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="CustomerID" Type="varchar" MaxLength="10" />
+          <Property Name="RentCreatAt" Type="nvarchar" MaxLength="50" />
+          <Property Name="RentStatus" Type="nvarchar" MaxLength="100" />
+          <Property Name="RentPickUpDate" Type="varchar" MaxLength="50" />
+          <Property Name="RentReturnDate" Type="varchar" MaxLength="50" />
+          <Property Name="RentTotalPrice" Type="int" />
+          <Property Name="EmployeeName" Type="nvarchar" MaxLength="100" />
+          <Property Name="EmployeePhone" Type="varchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="RentDetail">
+          <Key>
+            <PropertyRef Name="RentID" />
+          </Key>
+          <Property Name="RentID" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="VehicleID" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="CustomerID" Type="varchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="Vehicle">
+          <Key>
+            <PropertyRef Name="VehicleID" />
+          </Key>
+          <Property Name="VehicleID" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="VehicleName" Type="nvarchar" MaxLength="50" />
+          <Property Name="VehiclePrice" Type="int" />
+          <Property Name="VehicleInventory" Type="bit" />
+          <Property Name="VehicleFlatNumber" Type="varchar" MaxLength="50" />
+          <Property Name="VehicleModel" Type="nvarchar" MaxLength="50" />
+          <Property Name="VehicleStatus" Type="nvarchar" MaxLength="50" />
+          <Property Name="VehicleImage" Type="nvarchar" MaxLength="50" />
+          <Property Name="VehicleDescription" Type="ntext" />
+        </EntityType>
+        <Association Name="FK_Rent_ToCustomer">
+          <End Role="Customer" Type="Self.Customer" Multiplicity="0..1" />
+          <End Role="Rent" Type="Self.Rent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="CustomerID" />
+            </Principal>
+            <Dependent Role="Rent">
+              <PropertyRef Name="CustomerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RentDetail_ToRent">
+          <End Role="Rent" Type="Self.Rent" Multiplicity="1" />
+          <End Role="RentDetail" Type="Self.RentDetail" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Rent">
+              <PropertyRef Name="RentID" />
+            </Principal>
+            <Dependent Role="RentDetail">
+              <PropertyRef Name="RentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RentDetail_ToVehicle">
+          <End Role="Vehicle" Type="Self.Vehicle" Multiplicity="1" />
+          <End Role="RentDetail" Type="Self.RentDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Vehicle">
+              <PropertyRef Name="VehicleID" />
+            </Principal>
+            <Dependent Role="RentDetail">
+              <PropertyRef Name="VehicleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="RentalVehicalModelStoreContainer">
+          <EntitySet Name="Admin" EntityType="Self.Admin" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Customer" EntityType="Self.Customer" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Employee" EntityType="Self.Employee" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Rent" EntityType="Self.Rent" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RentDetail" EntityType="Self.RentDetail" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Vehicle" EntityType="Self.Vehicle" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Rent_ToCustomer" Association="Self.FK_Rent_ToCustomer">
+            <End Role="Customer" EntitySet="Customer" />
+            <End Role="Rent" EntitySet="Rent" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RentDetail_ToRent" Association="Self.FK_RentDetail_ToRent">
+            <End Role="Rent" EntitySet="Rent" />
+            <End Role="RentDetail" EntitySet="RentDetail" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RentDetail_ToVehicle" Association="Self.FK_RentDetail_ToVehicle">
+            <End Role="Vehicle" EntitySet="Vehicle" />
+            <End Role="RentDetail" EntitySet="RentDetail" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="RentalVehicalModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Admin">
+          <Key>
+            <PropertyRef Name="AdminID" />
+          </Key>
+          <Property Name="AdminID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="AdminPassword" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="AdminEmail" Type="Binary" MaxLength="100" FixedLength="false" />
+          <Property Name="AdminName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Customer">
+          <Key>
+            <PropertyRef Name="CustomerID" />
+          </Key>
+          <Property Name="CustomerName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="CustomerEmail" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CustomerAddress" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CustomerPhone" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="CustomerPassword" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="CustomerCreateAt" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CustomerID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Rent" Relationship="Self.FK_Rent_ToCustomer" FromRole="Customer" ToRole="Rent" />
+        </EntityType>
+        <EntityType Name="Employee">
+          <Key>
+            <PropertyRef Name="EmployeeID" />
+          </Key>
+          <Property Name="EmployeeID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="EmployeeName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="EmployeeEmail" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="EmployeePhone" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="EmployeePassword" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Rent">
+          <Key>
+            <PropertyRef Name="RentID" />
+          </Key>
+          <Property Name="RentID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="CustomerID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="RentCreatAt" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="RentStatus" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="RentPickUpDate" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="RentReturnDate" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="RentTotalPrice" Type="Int32" />
+          <Property Name="EmployeeName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="EmployeePhone" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Customer" Relationship="Self.FK_Rent_ToCustomer" FromRole="Rent" ToRole="Customer" />
+          <NavigationProperty Name="RentDetail" Relationship="Self.FK_RentDetail_ToRent" FromRole="Rent" ToRole="RentDetail" />
+        </EntityType>
+        <EntityType Name="RentDetail">
+          <Key>
+            <PropertyRef Name="RentID" />
+          </Key>
+          <Property Name="RentID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="VehicleID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="CustomerID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Rent" Relationship="Self.FK_RentDetail_ToRent" FromRole="RentDetail" ToRole="Rent" />
+          <NavigationProperty Name="Vehicle" Relationship="Self.FK_RentDetail_ToVehicle" FromRole="RentDetail" ToRole="Vehicle" />
+        </EntityType>
+        <EntityType Name="Vehicle">
+          <Key>
+            <PropertyRef Name="VehicleID" />
+          </Key>
+          <Property Name="VehicleID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="VehicleName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="VehiclePrice" Type="Int32" />
+          <Property Name="VehicleInventory" Type="Boolean" />
+          <Property Name="VehicleFlatNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="VehicleModel" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="VehicleStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="VehicleImage" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="VehicleDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="RentDetail" Relationship="Self.FK_RentDetail_ToVehicle" FromRole="Vehicle" ToRole="RentDetail" />
+        </EntityType>
+        <Association Name="FK_Rent_ToCustomer">
+          <End Role="Customer" Type="Self.Customer" Multiplicity="0..1" />
+          <End Role="Rent" Type="Self.Rent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="CustomerID" />
+            </Principal>
+            <Dependent Role="Rent">
+              <PropertyRef Name="CustomerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RentDetail_ToRent">
+          <End Role="Rent" Type="Self.Rent" Multiplicity="1" />
+          <End Role="RentDetail" Type="Self.RentDetail" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Rent">
+              <PropertyRef Name="RentID" />
+            </Principal>
+            <Dependent Role="RentDetail">
+              <PropertyRef Name="RentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RentDetail_ToVehicle">
+          <End Role="Vehicle" Type="Self.Vehicle" Multiplicity="1" />
+          <End Role="RentDetail" Type="Self.RentDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Vehicle">
+              <PropertyRef Name="VehicleID" />
+            </Principal>
+            <Dependent Role="RentDetail">
+              <PropertyRef Name="VehicleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="RentalVehicalDB" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Admin" EntityType="Self.Admin" />
+          <EntitySet Name="Customer" EntityType="Self.Customer" />
+          <EntitySet Name="Employee" EntityType="Self.Employee" />
+          <EntitySet Name="Rent" EntityType="Self.Rent" />
+          <EntitySet Name="RentDetail" EntityType="Self.RentDetail" />
+          <EntitySet Name="Vehicle" EntityType="Self.Vehicle" />
+          <AssociationSet Name="FK_Rent_ToCustomer" Association="Self.FK_Rent_ToCustomer">
+            <End Role="Customer" EntitySet="Customer" />
+            <End Role="Rent" EntitySet="Rent" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RentDetail_ToRent" Association="Self.FK_RentDetail_ToRent">
+            <End Role="Rent" EntitySet="Rent" />
+            <End Role="RentDetail" EntitySet="RentDetail" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RentDetail_ToVehicle" Association="Self.FK_RentDetail_ToVehicle">
+            <End Role="Vehicle" EntitySet="Vehicle" />
+            <End Role="RentDetail" EntitySet="RentDetail" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="RentalVehicalModelStoreContainer" CdmEntityContainer="RentalVehicalDB">
+          <EntitySetMapping Name="Admin">
+            <EntityTypeMapping TypeName="RentalVehicalModel.Admin">
+              <MappingFragment StoreEntitySet="Admin">
+                <ScalarProperty Name="AdminID" ColumnName="AdminID" />
+                <ScalarProperty Name="AdminPassword" ColumnName="AdminPassword" />
+                <ScalarProperty Name="AdminEmail" ColumnName="AdminEmail" />
+                <ScalarProperty Name="AdminName" ColumnName="AdminName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Customer">
+            <EntityTypeMapping TypeName="RentalVehicalModel.Customer">
+              <MappingFragment StoreEntitySet="Customer">
+                <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
+                <ScalarProperty Name="CustomerEmail" ColumnName="CustomerEmail" />
+                <ScalarProperty Name="CustomerAddress" ColumnName="CustomerAddress" />
+                <ScalarProperty Name="CustomerPhone" ColumnName="CustomerPhone" />
+                <ScalarProperty Name="CustomerPassword" ColumnName="CustomerPassword" />
+                <ScalarProperty Name="CustomerCreateAt" ColumnName="CustomerCreateAt" />
+                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Employee">
+            <EntityTypeMapping TypeName="RentalVehicalModel.Employee">
+              <MappingFragment StoreEntitySet="Employee">
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+                <ScalarProperty Name="EmployeeName" ColumnName="EmployeeName" />
+                <ScalarProperty Name="EmployeeEmail" ColumnName="EmployeeEmail" />
+                <ScalarProperty Name="EmployeePhone" ColumnName="EmployeePhone" />
+                <ScalarProperty Name="EmployeePassword" ColumnName="EmployeePassword" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Rent">
+            <EntityTypeMapping TypeName="RentalVehicalModel.Rent">
+              <MappingFragment StoreEntitySet="Rent">
+                <ScalarProperty Name="RentID" ColumnName="RentID" />
+                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+                <ScalarProperty Name="RentCreatAt" ColumnName="RentCreatAt" />
+                <ScalarProperty Name="RentStatus" ColumnName="RentStatus" />
+                <ScalarProperty Name="RentPickUpDate" ColumnName="RentPickUpDate" />
+                <ScalarProperty Name="RentReturnDate" ColumnName="RentReturnDate" />
+                <ScalarProperty Name="RentTotalPrice" ColumnName="RentTotalPrice" />
+                <ScalarProperty Name="EmployeeName" ColumnName="EmployeeName" />
+                <ScalarProperty Name="EmployeePhone" ColumnName="EmployeePhone" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RentDetail">
+            <EntityTypeMapping TypeName="RentalVehicalModel.RentDetail">
+              <MappingFragment StoreEntitySet="RentDetail">
+                <ScalarProperty Name="RentID" ColumnName="RentID" />
+                <ScalarProperty Name="VehicleID" ColumnName="VehicleID" />
+                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Vehicle">
+            <EntityTypeMapping TypeName="RentalVehicalModel.Vehicle">
+              <MappingFragment StoreEntitySet="Vehicle">
+                <ScalarProperty Name="VehicleID" ColumnName="VehicleID" />
+                <ScalarProperty Name="VehicleName" ColumnName="VehicleName" />
+                <ScalarProperty Name="VehiclePrice" ColumnName="VehiclePrice" />
+                <ScalarProperty Name="VehicleInventory" ColumnName="VehicleInventory" />
+                <ScalarProperty Name="VehicleFlatNumber" ColumnName="VehicleFlatNumber" />
+                <ScalarProperty Name="VehicleModel" ColumnName="VehicleModel" />
+                <ScalarProperty Name="VehicleStatus" ColumnName="VehicleStatus" />
+                <ScalarProperty Name="VehicleImage" ColumnName="VehicleImage" />
+                <ScalarProperty Name="VehicleDescription" ColumnName="VehicleDescription" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

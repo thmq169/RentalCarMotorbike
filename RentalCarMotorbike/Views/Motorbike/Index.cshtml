@@ -1,0 +1,29 @@
+﻿@model IEnumerable<RentalCarMotorbike.Models.Vehicle>
+@{
+    ViewBag.Title = "Home Page Motorbikes";
+}
+@{ 
+    Html.RenderPartial("_Search");
+}
+<div id="sec2" style="color: #777;background-color:white;text-align:center;padding:50px 0;">
+    <h3 style="text-align:center;">Available Motorbikes</h3>
+    <br>
+    <div class="row">
+
+        @foreach (var item in Model)
+        {
+            <div class="col-md-3 data" style="margin-bottom:15px">
+                <a href="@Url.Action("Details", new {id = item.VehicleID} )">
+                    <div class="sub-menu">
+
+                        <img class="card-img-top" src="~/Content/Image/Upload/Motorbikes/@item.VehicleImage" alt="Card image cap">
+                        <h5><b> @item.VehicleName </b></h5>
+                        <h4>@item.VehicleFlatNumber</h4>
+                        <h6> @item.VehiclePrice /day </h6>
+                    </div>
+                </a>
+            </div>
+        }
+    </div>
+
+</div>

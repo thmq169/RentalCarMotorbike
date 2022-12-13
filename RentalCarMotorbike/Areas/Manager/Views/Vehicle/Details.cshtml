@@ -1,0 +1,250 @@
+﻿@model RentalCarMotorbike.Models.Vehicle
+
+@{
+    ViewBag.Title = "Vehicle Details";
+}
+
+@{
+    Layout = "~/Areas/Manager/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Edit Vehicle Modal -->
+<div id="modal-edit" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Edit Vehicle</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="vehicle-flat-edit">Vehicle Flat Number:</label>
+                    <input type="text" class="form-control" name="vehicle-flat-edit" id="vehicle-flat-edit">
+                </div>
+                <div class="form-group">
+                    <label for="vehicle-name-edit">Vehicle Name:</label>
+                    <input type="text" class="form-control" name="vehicle-name-edit" id="vehicle-name-edit">
+                </div>
+                <div class="form-group">
+                    <label for="vehicle-price-edit">Vehicle Rent Price:</label>
+                    <input type="text" class="form-control" name="vehicle-price-edit" id="vehicle-price-edit">
+                </div>
+                <div class="form-group">
+                    <label for="vehicle-status-edit">Vehicle Rent Price:</label>
+                    <input type="text" class="form-control" name="vehicle-status-edit" id="vehicle-status-edit">
+                </div>
+                <div class="form-group">
+                    <label for="vehicle-desc-edit">Vehicle Description:</label>
+                    <textarea type="text" class="form-control" rows="10" name="vehicle-desc-edit" id="vehicle-desc-edit"></textarea>
+                </div>
+
+
+            </div>
+            <div class="modal-footer">
+                <button class="submit-edit">Edit</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Delete Vehicle Modal -->
+<div id="modal-delete" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Delete Vehicle</h4>
+            </div>
+            <div class="modal-body">
+                <p>Do you want to delete <strong id="vehicleDeleteName"></strong> (<strong id="vehicleDeleteFlat"></strong>) ?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default submitDelete">Delete</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div>
+    <h2>Detail About @Model.VehicleName</h2>
+    <hr />
+    <dl class="table-dl dl-horizontal ">
+        <dt>
+
+        </dt>
+
+        @if (@Model.VehicleModel == "Car")
+        {
+            <dd>
+                <img src='~/Content/Image/Upload/Cars/@Model.VehicleImage' style="width:500px; height:auto" />
+            </dd>
+        }
+        else
+        {
+            <dd>
+                <img src='~/Content/Image/Upload/Motorbikes/@Model.VehicleImage' style="width:500px; height:auto" />
+            </dd>
+        }
+
+        <dt>
+            @Html.DisplayNameFor(model => model.VehicleName)
+        </dt>
+
+        <dd class="dt-vehicle-name">
+            @Html.DisplayFor(model => model.VehicleName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.VehicleFlatNumber)
+        </dt>
+
+        <dd class="dt-vehicle-flat">
+            @Html.DisplayFor(model => model.VehicleFlatNumber)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.VehiclePrice)
+        </dt>
+
+        <dd class="dt-vehicle-price">
+            @Html.DisplayFor(model => model.VehiclePrice)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.VehicleInventory)
+        </dt>
+
+
+        @if (@Model.VehicleInventory.ToString() == "True")
+        {
+            <dd class="dt-vehicle-inventory">
+                Qualified
+            </dd>
+         }
+         else
+         {
+                <dd class="dt-vehicle-inventory">
+                    Not Qualified
+                </dd>
+          }
+           
+            <dt>
+                @Html.DisplayNameFor(model => model.VehicleModel)
+            </dt>
+            <dd class="dt-vehicle-model">
+                @Html.DisplayFor(model => model.VehicleModel)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.VehicleStatus)
+            </dt>
+            <dd class="dt-vehicle-status">
+                @Html.DisplayFor(model => model.VehicleStatus)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.VehicleDescription)
+            </dt>
+            <dd class="dt-vehicle-desc">
+                @Html.DisplayFor(model => model.VehicleDescription)
+            </dd>
+        </dl>
+</div>
+
+<button class="edit btn btn-primary " data-id="@Model.VehicleID">Edit</button>
+@Html.ActionLink("Back to List", "Index", null, new { @class = "back-to-vehicle-list btn btn-warning" })
+<button class="delete btn btn-danger" data-id="@Model.VehicleID" data-name="@Model.VehicleName" data-flat="@Model.VehicleFlatNumber">Delete</button>
+@section Scripts{
+    <script type="text/javascript">
+
+        $(function () {
+
+            $(".edit").click(function () {
+                $('#modal-edit').modal('show')
+                $("#vehicle-flat-edit").val($(".dt-vehicle-flat").text())
+                $("#vehicle-name-edit").val($(".dt-vehicle-name").text())
+                $("#vehicle-price-edit").val($(".dt-vehicle-price").text())
+                $("#vehicle-desc-edit").val($(".dt-vehicle-desc").text())
+                $("#vehicle-status-edit").val($(".dt-vehicle-status").text())
+
+                $('.submit-edit').attr('data-id', $(this).data("id"))
+            })
+
+
+
+            $(".submit-edit").click(function () {
+                const formData = new FormData();
+                formData.append("vehicle-flat-edit", $.trim( $("#vehicle-flat-edit").val()))
+                formData.append("vehicle-name-edit", $.trim($("#vehicle-name-edit").val()))
+                formData.append("vehicle-price-edit", $.trim($("#vehicle-price-edit").val()))
+                formData.append("vehicle-model-edit", $.trim($(".dt-vehicle-model").text()))
+                formData.append("vehicle-desc-edit", $.trim($("#vehicle-desc-edit").val()))
+                formData.append("vehicle-status-edit", $.trim($("#vehicle-status-edit").val()))
+                const idVehicle = $(this).data("id")
+                const urlAction = '@Url.Action("Edit")'
+                console.log(urlAction + "/" + idVehicle)
+                console.log($.trim($("#vehicle-flat-edit").val()))
+                console.log($.trim($("#vehicle-name-edit").val()))
+                console.log($.trim($("#vehicle-price-edit").val()))
+                console.log($.trim($(".dt-vehicle-model").text()))
+                console.log($.trim($("#vehicle-price-edit").val()))
+                console.log($.trim($("#vehicle-status-edit").val()))
+                console.log($.trim($("#vehicle-desc-edit").val()))
+                $.ajax({
+                    type: "POST",
+                    url: urlAction + "/" + idVehicle,
+                    data: formData,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: function (data) {
+                        if (data.code === 0) {
+                            localStorage.setItem("Edit", data.message)
+                            window.location.reload()
+                        }
+                        $("#modal-edit").modal("hide")
+
+                    },
+                    error: function () {
+                        alert("Error while inserting data");
+                    }
+                })
+            })
+
+            $(".delete").click(function () {
+                $("#vehicleDeleteName").text($(this).data("name"))
+                $("#vehicleDeleteFlat").text($(this).data("flat"))
+                $('#modal-delete').modal('show')
+                $('.submitDelete').attr('data-id', $(this).data("id"))
+            })
+
+            $(".submitDelete").click(function () {
+
+                const idDeleteVehicle = $(this).data("id")
+                const urlAction = '@Url.Action("Delete")'
+                console.log(urlAction + "/" + idDeleteVehicle)
+                $.ajax({
+                    type: "POST",
+                    url: urlAction + "/" + idDeleteVehicle,
+                    data: idDeleteVehicle,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: function (data) {
+
+                        if (data.code === 0) {
+                            localStorage.setItem("Delete", data.message)
+                            $(location).attr("href", "@Url.Action("Index")")
+                        }
+                        $("#modal-delete").modal("hide")
+
+                    },
+                    error: function () {
+                        alert("Error while inserting data");
+                    }
+                })
+            })
+        })
+    </script>
+
+}

@@ -1,0 +1,97 @@
+﻿@model RentalCarMotorbike.Common.Account
+
+@{
+    ViewBag.Title = "Login";
+    Layout = null;
+
+
+    @*if (Session["userID"] != null)
+    {
+        Response.Redirect("~/Home/Index");
+     }*@
+
+}
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/Content/material-design-iconic-font.min.css")
+    @Styles.Render("~/Content/style.css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+
+<body>
+    <div class="main">
+        <div class="signin-image">
+            <figure><img src="~/Content/Image/Assets/signin-image.jpg" alt="sing up image"></figure>
+
+        </div>
+        @using (Html.BeginForm("Login", "Authent", FormMethod.Post, new { @class = "form", @id = "login-form" }))
+        {
+            <h3 class="heading">Login</h3>
+            <div class="form-horizontal">
+
+                @Html.AntiForgeryToken()
+                <div class="form-group">
+                    <label class="form-label" for="customer">You are</label>
+                    <div class="" style="display:flex; justify-content:start;align-items:center; font-size:14px">
+                        <div style="display: flex; align-items: center; justify-content: center;margin-right:10px">
+                            @Html.RadioButtonFor(m => m.Role, "Customer") Customer
+                        </div>
+                        <div style="display: flex; align-items: center; justify-content: center;">
+                            @Html.RadioButtonFor(m => m.Role, "Employee") Employee
+                        </div>
+                    </div>
+
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "form-label col-md-2" })
+                    @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", @rule = "required" } })
+                    <span class="form-message"></span>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "form-label col-md-2" })
+                    @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control", @type = "password", @rule = "required|min:4" } })
+                    <span class="form-message"></span>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <button type="submit" name="signin" id="signin" class="form-submit">Login</button>
+                    </div>
+                </div>
+
+                <div class="error-wrapper">
+                    @Html.ValidationSummary()
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10" style="font-size:16px">
+                        <p>Don't have an account?</p>
+                        @Html.ActionLink("Signup", "Signup") Here
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/Scripts/validation.js")
+    <script type="text/javascript">
+        var registerForm = new Validator('#login-form')
+        function preventBack() { window.history.forward() }
+        setTimeout(preventBack(), 0);
+        window.onunload = function () { null };
+    </script>
+</body>
+
+</html>
+
+

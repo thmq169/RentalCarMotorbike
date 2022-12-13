@@ -1,0 +1,54 @@
+﻿@model RentalCarMotorbike.Models.Customer
+
+@{
+    ViewBag.Title = "Customer Details";
+}
+
+<div>
+    <h2>Details About @Model.CustomerName</h2>
+    
+    <dl class="dl-horizontal table-dl">
+        <dt>
+            @Html.DisplayNameFor(model => model.CustomerName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CustomerName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CustomerEmail)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CustomerEmail)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CustomerAddress)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CustomerAddress)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CustomerPhone)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CustomerPhone)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.CustomerCreateAt)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CustomerCreateAt)
+        </dd>
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Back to renting", "Index","Rent", null, new { @class = "btn btn-primary" })
+</p>
+

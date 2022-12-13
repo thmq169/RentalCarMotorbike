@@ -1,0 +1,94 @@
+﻿@{
+    if (Session["admin"] == null)
+    {
+        Response.Redirect("~/Authent/Login");
+    }
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+    @*@Styles.Render("~/Content/css")*@
+    @Styles.Render("~/Content/bootstrap.min.css")
+    @Styles.Render("~/Content/layout.css")
+    @Styles.Render("~/Content/user.css")
+    @Styles.Render("~/Content/main.css")
+    @Styles.Render("~/Content/Site.css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+
+    <div id="wrapper">
+        <ul class="nav navbar-nav side-nav">
+            <li style="width:100%">
+                <div style="width: 100%; text-align: center; padding: 10px 0;" class="navbar-header">
+                    @Html.ActionLink("RenTals", "Index", "Home", new { area = "" }, new { @class = " page-scroll logo" })
+                </div>
+            </li>
+            <li>
+                <a href="@Url.Action("Index","Vehicle")"><i class="fa fa-fw fa-car"></i> Vehicles </a>
+
+            </li>
+            <li>
+                <a href="@Url.Action("Index","Customer")"><i class="fa fa-fw fa-user-plus"></i> Customers</a>
+            </li>
+            <li>
+                <a href="@Url.Action("Index","Employee")"><i class="fa fa-fw fa-user-secret"></i> Employees</a>
+            </li>
+            <li>
+                <a href="@Url.Action("Index","Rent")"><i class="fa fa-fw fa-paper-plane-o"></i> Rents</a>
+            </li>
+            <li>
+                <a href="@Url.Action("Logout","Authent", new { area = "" })"><i class="fa fa-fw fa fa-power-off"></i> Logout</a>
+            </li>
+        </ul>
+
+        <div id="page-wrapper">
+            <div class="container-fluid">
+                @{
+                    Html.RenderPartial("_Search");
+                }
+                <!-- Page Heading -->
+                <div class="" id="main">
+                    <div class="col-sm-12 col-md-12 well" style="padding: 35px;" id="content">
+                        @RenderBody()
+                    </div>
+                </div>
+                <!-- /.row -->
+            </div>
+            <!-- /.container-fluid -->
+        </div>
+        <!-- /#page-wrapper -->
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    <script type="text/javascript">
+            $(document).ready(function () {
+                function contain(text_one, text_two) {
+                    if (text_one.indexOf(text_two) != -1) {
+                        return true;
+                    }
+                }
+                $("#search").keyup(function () {
+                    const searchValue = $("#search").val().toLowerCase();
+                    $(".data").each(function () {
+                        if (!contain($(this).text().toLowerCase(), searchValue)) {
+                            $(this).hide()
+                        }
+                        else {
+                            $(this).show()
+                        }
+
+                    })
+                })
+            })
+        function preventBack() { window.history.forward() }
+        setTimeout(preventBack(), 0);
+        window.onunload = function () { null };
+    </script>
+    @RenderSection("scripts", required: false)
+</body>
+</html>

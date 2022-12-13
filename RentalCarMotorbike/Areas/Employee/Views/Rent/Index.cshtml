@@ -1,0 +1,62 @@
+﻿@model RentalCarMotorbike.ViewModel.ViewModels
+
+@{
+    ViewBag.Title = "Rentings";
+}
+@{
+    Html.RenderPartial("_Search");
+}
+
+<h2>Rent Management</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            Rent Code
+        </th>
+        <th>
+            Vehicle Name
+        </th>
+        <th>
+            Customer Rent
+        </th>
+        <th>
+            Vehicle Model
+        </th>
+        <th>
+            Rent Status
+        </th>
+        <th>
+            Phone Rent
+        </th>
+        <th>Action</th>
+    </tr>
+
+    @for (int i = 0; i < Model.Rent.Count; i++)
+    {
+        <tr class="data">
+            <td>
+                @Model.Rent[i].RentID
+            </td>
+            <td>
+                @Html.ActionLink(Model.Vehicle[i].VehicleName, "Details", "Vehicle", new { id = Model.Vehicle[i].VehicleID }, null)
+            </td>
+            <td>
+                @Html.ActionLink(Model.Customer[i].CustomerName, "Details", "Customer", new { id = Model.Customer[i].CustomerID }, null)
+            </td>
+            <td>
+                @Model.Vehicle[i].VehicleModel
+            </td>
+            <td>
+                @Model.Rent[i].RentStatus
+            </td>
+            <td>
+                @Model.Customer[i].CustomerPhone
+            </td>
+            <td>
+                @Html.ActionLink("More details", "Details", new { id = Model.Rent[i].RentID, idCus = Model.Customer[i].CustomerID, idVeh = Model.Vehicle[i].VehicleID }, new { @class = "btn btn-warning" })
+            </td>
+        </tr>
+    }
+
+</table>

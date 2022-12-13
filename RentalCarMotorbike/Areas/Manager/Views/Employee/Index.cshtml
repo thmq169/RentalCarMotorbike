@@ -1,0 +1,208 @@
+﻿@model IEnumerable<RentalCarMotorbike.Models.Employee>
+
+@{
+    ViewBag.Title = "Employee";
+}
+
+@{
+    Layout = "~/Areas/Manager/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Employee Management</h2>
+@*Create employee Modal*@
+<button type="button" class="btn btn-warning btn-lg" data-toggle="modal" data-target="#create-employee">Create New employee</button>
+<div id="create-employee" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Create New Employee</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="employee-identity">Employee Identity:</label>
+                    <input type="text" class="form-control" name="employee-identity" id="employee-identity">
+                </div>
+                <div class="form-group">
+                    <label for="employee-name">Employee Name:</label>
+                    <input type="text" class="form-control" name="employee-name" id="employee-name">
+                </div>
+                <div class="form-group">
+                    <label for="employee-email">Employee Email:</label>
+                    <input type="email" class="form-control" name="employee-email" id="employee-email">
+                </div>
+                <div class="form-group">
+                    <label for="employee-password">Employee Password:</label>
+                    <input type="text" class="form-control" name="employee-password" id="employee-password">
+                </div>
+                <div class="form-group">
+                    <label for="employee-phone">Employee Phone:</label>
+                    <input type="text" class="form-control" name="employee-phone" id="employee-phone">
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button class="create-employee">Create New Employee</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@*Delete Employee Modal*@
+<div id="delete-employee" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Delete Employee</h4>
+            </div>
+            <div class="modal-body">
+                <p>Do you want to delete <strong id="employeeDeleteName"></strong> (<strong id="employeeDeletePhone"></strong>) ?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default submit-delete-employee">Delete</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+<table class="table" style=" margin-top: 20px; ">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.EmployeeName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EmployeeEmail)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EmployeePhone)
+        </th>
+        <th>Action</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr class="data">
+            <td>
+                @Html.DisplayFor(modelItem => item.EmployeeName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EmployeeEmail)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EmployeePhone)
+            </td>
+
+            <td>
+                <button class="btn btn-danger delete-employee" data-id="@item.EmployeeID" data-name="@item.EmployeeName" data-phone="@item.EmployeePhone">Delete</button>
+            </td>
+        </tr>
+    }
+
+</table>
+
+@section Scripts{
+    <script type="text/javascript">
+
+        $(function () {
+            $(".create-employee").click(function () {
+                const formData = new FormData();
+                formData.append("employee-identity", $("#employee-identity").val())
+                formData.append("employee-name", $("#employee-name").val())
+                formData.append("employee-email", $("#employee-email").val())
+                formData.append("employee-password", $("#employee-password").val())
+                formData.append("employee-phone", $("#employee-phone").val())
+                console.log(formData.get("employee-identity"))
+                console.log(formData.get("employee-name"))
+                console.log(formData.get("employee-email"))
+                console.log(formData.get("employee-password"))
+                console.log(formData.get("employee-phone"))
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("Create")',
+                    data: formData,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: function (data) {
+                        if (data.code === 0) {
+                            localStorage.setItem("Create employee", data.message)
+                            window.location.reload()
+                        }
+
+                        $("#create-employee").modal("hide")
+                    },
+                    error: function () {
+                        alert("Error while inserting data");
+                    }
+            });
+
+            })
+
+            @*$(".edit-employee").click(function () {
+                $('#edit-employee').modal('show')
+                $('.submit-edit-employee').attr('data-id', $(this).data("id"))
+            })
+
+
+            $(".submit-edit-employee").click(function () {
+                var formData = new FormData();
+                
+                const idemployee = $(this).data("id")
+                const urlAction = '@Url.Action("Edit")'
+                console.log(urlAction + "/" + idemployee)
+                $.ajax({
+                    type: "POST",
+                    url: urlAction + "/" + idemployee,
+                    data: formData,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: function (data) {
+
+                        localStorage.setItem("Message", data.Msg)
+                        $("#edit-employee").modal("hide")
+
+                    },
+                    error: function () {
+                        alert("Error while inserting data");
+                    }
+                })
+            })*@
+
+            $(".delete-employee").click(function () {
+                $("#employeeDeleteName").text($(this).data("name"))
+                $("#employeeDeletePhone").text($(this).data("phone"))
+                $('#delete-employee').modal('show')
+                $('.submit-delete-employee').attr('data-id', $(this).data("id"))
+            })
+
+            $(".submit-delete-employee").click(function () {
+
+                const idDeleteemployee = $(this).data("id")
+                const urlAction = '@Url.Action("Delete")'
+                console.log(urlAction + "/" + idDeleteemployee)
+                $.ajax({
+                    type: "POST",
+                    url: urlAction + "/" + idDeleteemployee,
+                    data: idDeleteemployee,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: function (data) {s
+                        localStorage.setItem("Delete", data.message)
+                        $("#delete-employee").modal("hide")
+                        window.location.reload()
+                    },
+                    error: function () {
+                        alert("Error while inserting data");
+                    }
+                })
+            })
+        })
+    </script>
+
+}

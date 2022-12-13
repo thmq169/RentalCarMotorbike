@@ -1,0 +1,82 @@
+﻿@model RentalCarMotorbike.ViewModel.ViewModels
+
+@using System;
+@{
+    ViewBag.Title = "ReturnConfirm";
+    DateTime FromYear = Convert.ToDateTime(Model.rent.RentPickUpDate);
+    DateTime ToYear = Convert.ToDateTime(Model.rent.RentReturnDate);
+
+    TimeSpan objTimeSpan = ToYear - FromYear;
+    double Days = Convert.ToDouble(objTimeSpan.TotalDays);
+    string numberDayRent = Convert.ToString(Days);
+    ViewBag.Title = "Customer ReturnConfirm";
+}
+<div class="container" style="padding: 0">
+    <div class="jumbotron">
+        <h1 class="text-center" style="color: green;"><span class="glyphicon glyphicon-ok-circle"></span> Vehicle Returned</h1>
+    </div>
+</div>
+<br>
+
+<h2 class="text-center"> Thank you for using Car/Motorbike Rental System! We wish you have a safe ride. </h2>
+
+<h3 class="text-center"> <strong>Your Rent ID Number:</strong> <span style="color: blue;">@Model.rent.RentID</span> </h3>
+
+<div class="container">
+    <div class="box">
+        <div class="col-md-10" style="float: none; margin: 0 auto; text-align: center;">
+            <h3 style="color: orange;">Your renting return has been received and placed into out order processing system.Please bring the vehicle with us. Thank you!!! </h3>
+            <br>
+            <h3 style="color: orange;">Your Invoice</h3>
+            <br>
+        </div>
+        <div class="col-md-10" style="float: none; margin: 0 auto; ">
+            <table>
+                <tr>
+                    <td><h4><strong>Vehicle Name: </strong> </h4></td>
+                    <td>@Model.vehicle.VehicleName</td>
+                </tr>
+                <tr>
+                    <td> <h4> <strong>Vehicle Flat Number:</strong></h4></td>
+                    <td>@Model.vehicle.VehicleFlatNumber</td>
+                </tr>
+                <tr>
+                    <td><h4> <strong>Vehicle Model: </strong> </h4></td>
+                    <td>@Model.vehicle.VehicleModel</td>
+                </tr>
+                <tr>
+                    <td><h4> <strong>Start Date: </strong></h4></td>
+                    <td>@Model.rent.RentPickUpDate</td>
+                </tr>
+                <tr>
+                    <td><h4> <strong>Return Date: </strong></h4></td>
+                    <td>@Model.rent.RentReturnDate</td>
+                </tr>
+                <tr>
+                    <td><h4> <strong>Cost:</strong></h4></td>
+                    <td>@Model.vehicle.VehiclePrice</td>
+                </tr>
+                <tr>
+                    <td><h4> <strong>Number of days:</strong></h4></td>
+                    <td>@Days</td>
+                </tr>
+                <tr>
+                    <td><h4> <strong>Vehicle Total Cost: </strong> </h4></td>
+                    <td>@Model.rent.RentTotalPrice</td>
+                </tr>
+
+                <tr>
+                    <td></td>
+                    <td>@Html.ActionLink("Back To Home", "Index", "Motorbike", null, new { @class = "btn btn-primary"  }) </td>
+                </tr>
+            </table>
+
+
+            @*<h4> <strong>Employee Name:</strong>  </h4>
+                <br>
+                <h4> <strong>Employee Contact: </strong> </h4>
+                <br>*@
+        </div>
+    </div>
+</div>
+

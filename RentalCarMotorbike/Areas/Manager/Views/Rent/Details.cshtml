@@ -1,0 +1,149 @@
+﻿@model RentalCarMotorbike.ViewModel.ViewModels
+
+@{
+    ViewBag.Title = "Rent Details";
+}
+
+@{
+    int id = ViewBag.id;
+}
+
+@{
+    Layout = "~/Areas/Manager/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details Renting @Model.Vehicle[@id].VehicleName</h2>
+
+<div>
+    <dl class="table-dl dl-horizontal">
+        @if (@Model.Vehicle[@id].VehicleModel == "Car")
+        {
+            <dd>
+                <img src='~/Content/Image/Upload/Cars/@Model.Vehicle[@id].VehicleImage' style="width:500px; height:auto" />
+            </dd>
+        }
+        else
+        {
+            <dd>
+                <img src='~/Content/Image/Upload/Motorbikes/@Model.Vehicle[@id].VehicleImage' style="width:500px; height:auto" />
+            </dd>
+        }
+        <dt>
+            @Html.DisplayNameFor(m => Model.Vehicle[@id].VehicleName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(m => Model.Vehicle[@id].VehicleName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(m => Model.Vehicle[@id].VehiclePrice)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(m => Model.Vehicle[@id].VehiclePrice)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(m => Model.Vehicle[@id].VehicleInventory)
+        </dt>
+
+        @if (Model.Vehicle[@id].VehicleInventory.ToString() == "True")
+        {
+            <dd class="dt-vehicle-inventory">
+                Qualified
+            </dd>
+        }
+        else
+        {
+            <dd class="dt-vehicle-inventory">
+                Not Qualified
+            </dd>
+        }
+
+        <dt>
+            @Html.DisplayNameFor(m => Model.Vehicle[@id].VehicleFlatNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(m => Model.Vehicle[@id].VehicleFlatNumber)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(m => Model.Vehicle[@id].VehicleModel)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(m => Model.Vehicle[@id].VehicleModel)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(m => Model.Vehicle[@id].VehicleStatus)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(m => Model.Vehicle[@id].VehicleStatus)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(m => Model.Customer[@id].CustomerEmail)
+        </dt>
+        <dd>
+            @Html.DisplayFor(m => Model.Customer[@id].CustomerEmail)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(m => Model.Customer[@id].CustomerName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(m => Model.Customer[@id].CustomerName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(m => Model.Customer[@id].CustomerPhone)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(m => Model.Customer[@id].CustomerPhone)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(m => Model.Customer[@id].CustomerAddress)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(m => Model.Customer[@id].CustomerAddress)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(m => Model.Rent[@id].RentTotalPrice)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(m => Model.Rent[@id].RentTotalPrice)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(m => Model.Rent[@id].RentStatus)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(m => Model.Rent[@id].RentStatus)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(m => Model.Rent[@id].RentCreatAt)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(m => Model.Rent[@id].RentCreatAt)
+        </dd>
+
+    </dl>
+</div>
+
+
+
+<p>
+   @* @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |*@
+    @Html.ActionLink("Back to List", "Index",null, new { @class = "btn btn-primary"} )
+</p>
