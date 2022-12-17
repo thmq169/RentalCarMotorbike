@@ -58,6 +58,9 @@
                 </div>
                 <!-- /.row -->
             </div>
+            <div class="alert alert-success">
+                <strong>Success!</strong> This alert box could indicate a successful or positive action.
+            </div>
             <!-- /.container-fluid -->
         </div>
         <!-- /#page-wrapper -->
@@ -66,7 +69,8 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     <script type="text/javascript">
-            $(document).ready(function () {
+        $(document).ready(function () {
+            $(".alert.alert-success").hide();
                 function contain(text_one, text_two) {
                     if (text_one.indexOf(text_two) != -1) {
                         return true;
