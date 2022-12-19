@@ -53,14 +53,24 @@ namespace RentalCarMotorbike.Areas.Manager.Controllers
                                                 "EmployeeEmail," +
                                                 "EmployeePhone) " +
                          "VALUES (@EmployeeID, @EmployeeName, @EmployeePassword,@EmployeeEmail,@EmployeePhone)";
-
+            string sqlSelect = "SELECT * FROM Employee WHERE @EmployeeID = EmployeeID";
             using (SqlConnection oSqlConnection = new SqlConnection(connectionStringDB()))
             {
-                SqlCommand oSqlCommand = new SqlCommand(Sql, oSqlConnection);
-                try
+                oSqlConnection.Open();
+                SqlCommand cmd = new SqlCommand(Sql, oSqlConnection);
+                SqlCommand commmand = new SqlCommand(sqlSelect, oSqlConnection);
+
+                string idSelect = collection["employee-identity"];
+                commmand.Parameters.AddWithValue("@EmployeeID", idSelect);
+                var sqlReader = commmand.ExecuteReader();
+                if (sqlReader.HasRows)
                 {
-                    oSqlConnection.Open();
-                    SqlCommand cmd = new SqlCommand(Sql, oSqlConnection);
+                    oSqlConnection.Close();
+                    return Json(new { code = 1, message = "ID or Phone Employee has been existed." });
+                }
+                else
+                {
+                    SqlCommand oSqlCommand = new SqlCommand(Sql, oSqlConnection);
                     string id = collection["employee-identity"];
                     string name = collection["employee-name"];
                     string email = collection["employee-email"];
@@ -75,18 +85,7 @@ namespace RentalCarMotorbike.Areas.Manager.Controllers
                     oSqlCommand.CommandType = CommandType.Text;
                     oSqlCommand.ExecuteNonQuery();
 
-
-                    return Json(new { code = 0, message = "Success" });
-                }
-                catch (Exception ex)
-                {
-                    return Json(new { Msg = ex.Message });
-                }
-                finally
-                {
-                    oSqlCommand.Dispose();
-                    oSqlConnection.Close();
-                    oSqlConnection.Dispose();
+                    return Json(new { code = 0, message = "Create Employee Success " });
                 }
             }
         }
@@ -99,11 +98,11 @@ namespace RentalCarMotorbike.Areas.Manager.Controllers
                 var db = new RentalVehicalDB();
                 db.Employee.Remove(db.Employee.Find(id));
                 db.SaveChanges();
-                return Json(new { code = 0, message = "Success" });
+                return Json(new { code = 0, message = "Delete Employee Success" });
             }
             catch (Exception ex)
             {
-                return Json(new { Msg = ex.Message });
+                return Json(new { code = 1, message = "Delete Employee Failed" });
             }
         }
     }

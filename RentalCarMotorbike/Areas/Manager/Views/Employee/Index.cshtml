@@ -128,50 +128,18 @@
                     contentType: false,
                     processData: false,
                     success: function (data) {
-                        if (data.code === 0) {
-                            localStorage.setItem("Create employee", data.message)
-                            window.location.reload()
-                        }
-
+                        localStorage.setItem("message", JSON.stringify(data))
+                        window.location.reload()
                         $("#create-employee").modal("hide")
                     },
                     error: function () {
-                        alert("Error while inserting data");
+                        localStorage.setItem("message", JSON.stringify(data))
+                        window.location.reload()
+                        $("#create-employee").modal("hide")
                     }
             });
 
             })
-
-            @*$(".edit-employee").click(function () {
-                $('#edit-employee').modal('show')
-                $('.submit-edit-employee').attr('data-id', $(this).data("id"))
-            })
-
-
-            $(".submit-edit-employee").click(function () {
-                var formData = new FormData();
-                
-                const idemployee = $(this).data("id")
-                const urlAction = '@Url.Action("Edit")'
-                console.log(urlAction + "/" + idemployee)
-                $.ajax({
-                    type: "POST",
-                    url: urlAction + "/" + idemployee,
-                    data: formData,
-                    cache: false,
-                    contentType: false,
-                    processData: false,
-                    success: function (data) {
-
-                        localStorage.setItem("Message", data.Msg)
-                        $("#edit-employee").modal("hide")
-
-                    },
-                    error: function () {
-                        alert("Error while inserting data");
-                    }
-                })
-            })*@
 
             $(".delete-employee").click(function () {
                 $("#employeeDeleteName").text($(this).data("name"))
@@ -192,13 +160,15 @@
                     cache: false,
                     contentType: false,
                     processData: false,
-                    success: function (data) {s
-                        localStorage.setItem("Delete", data.message)
-                        $("#delete-employee").modal("hide")
+                    success: function (data) {
+                        localStorage.setItem("message", JSON.stringify(data))
                         window.location.reload()
+                        $("#delete-employee").modal("hide")
                     },
                     error: function () {
-                        alert("Error while inserting data");
+                        localStorage.setItem("message", JSON.stringify(data))
+                        window.location.reload()
+                        $("#delete-employee").modal("hide")
                     }
                 })
             })
