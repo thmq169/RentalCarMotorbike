@@ -67,14 +67,26 @@ namespace RentalCarMotorbike.Areas.Manager.Controllers
                                                 "CustomerPhone," +
                                                 "CustomerCreateAt)" +
                          "VALUES (@CustomerID, @CustomerName, @CustomerPassword, @CustomerEmail, @CustomerAddress, @CustomerPhone,@CustomerCreateAt)";
-
+            string sqlSelect = "SELECT * FROM Customer WHERE @CustomerID = CustomerID";
             using (SqlConnection oSqlConnection = new SqlConnection(connectionStringDB()))
             {
-                SqlCommand oSqlCommand = new SqlCommand(Sql, oSqlConnection);
-                try
+                oSqlConnection.Open();
+                SqlCommand cmd = new SqlCommand(Sql, oSqlConnection);
+                
+                SqlCommand commmand = new SqlCommand(sqlSelect, oSqlConnection);
+                string idSelect = collection["customer-identity"];
+                commmand.Parameters.AddWithValue("@CustomerID", idSelect);
+                var sqlReader = commmand.ExecuteReader();
+                if (sqlReader.HasRows)
                 {
-                    oSqlConnection.Open();
-                    SqlCommand cmd = new SqlCommand(Sql, oSqlConnection);
+                    oSqlConnection.Close();
+                    return Json(new {code = 1, message = "ID or Phone has been existed."});
+                }
+                else
+                {
+                    SqlCommand oSqlCommand = new SqlCommand(Sql, oSqlConnection);
+                    
+
                     string id = collection["customer-identity"];
                     string name = collection["customer-name"];
                     string email = collection["customer-email"];
@@ -91,19 +103,11 @@ namespace RentalCarMotorbike.Areas.Manager.Controllers
                     oSqlCommand.CommandType = CommandType.Text;
                     oSqlCommand.ExecuteNonQuery();
 
-
-                    return Json(new { code = 0, message = "Success" });
-                }
-                catch (Exception ex)
-                {
-                    return Json(new { Msg = ex.Message });
-                }
-                finally
-                {
-                    oSqlCommand.Dispose();
                     oSqlConnection.Close();
-                    oSqlConnection.Dispose();
+                    return Json(new { code = 0, message = "Create Customer Success." });
                 }
+                
+                
             }
         }
 
@@ -181,11 +185,11 @@ namespace RentalCarMotorbike.Areas.Manager.Controllers
                     oSqlCommand.CommandType = CommandType.Text;
                     oSqlCommand.ExecuteNonQuery();
 
-                    return Json(new { Msg = "Sucess" });
+                    return Json(new { code = 0, message = "Delete Customer Success" }) ;
                 }
                 catch (Exception ex)
                 {
-                    return Json(new { Msg = "Error" });
+                    return Json(new { code = 1, message = "Delete Customer Failed" });
                 }
                 finally
                 {
@@ -205,7 +209,7 @@ namespace RentalCarMotorbike.Areas.Manager.Controllers
                 customer.CustomerPassword = BCrypt.Net.BCrypt.HashPassword(newPass, 12);
                 db.SaveChanges();
 
-                return Json(new { Msg = "Success Change" }, JsonRequestBehavior.AllowGet);
+                return Json(new { code = 0, message = "Change New Password Success" }, JsonRequestBehavior.AllowGet);
             }
         }
     }

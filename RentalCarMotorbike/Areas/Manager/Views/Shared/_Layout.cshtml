@@ -50,6 +50,12 @@
                 @{
                     Html.RenderPartial("_Search");
                 }
+                <div class="message alert alert-success" style="display:none">
+                    <strong>Success!</strong> <span></span>
+                </div>
+                <div class="message alert alert-danger" style="display:none">
+                    <strong>Failed!</strong> <span></span>
+                </div>
                 <!-- Page Heading -->
                 <div class="" id="main">
                     <div class="col-sm-12 col-md-12 well" style="padding: 35px;" id="content">
@@ -58,9 +64,7 @@
                 </div>
                 <!-- /.row -->
             </div>
-            <div class="alert alert-success">
-                <strong>Success!</strong> This alert box could indicate a successful or positive action.
-            </div>
+            
             <!-- /.container-fluid -->
         </div>
         <!-- /#page-wrapper -->
@@ -70,7 +74,30 @@
     @Scripts.Render("~/bundles/bootstrap")
     <script type="text/javascript">
         $(document).ready(function () {
-            $(".alert.alert-success").hide();
+            @*$(".alert.alert-success").hide();
+            $(".alert.alert-danger").hide();*@
+
+            if (localStorage.getItem("message")) {
+                const data = JSON.parse(localStorage.getItem("message"))
+                if (data.code === 0) {
+
+                    $(".message.alert-success span").text(data.message)
+                    $(".alert.alert-success").show()
+                    setTimeout(function () {
+                        $(".alert.alert-success").hide()
+                    }, 4000)
+                }
+                else if (data.code === 1) {
+                    $(".message.alert-danger span").text(data.message)
+                    $(".alert.alert-danger").show()
+                    setTimeout(function () {
+                        $(".alert.alert-danger").hide()
+                    }, 4000)
+                }
+
+                localStorage.removeItem("message")
+            }
+
                 function contain(text_one, text_two) {
                     if (text_one.indexOf(text_two) != -1) {
                         return true;

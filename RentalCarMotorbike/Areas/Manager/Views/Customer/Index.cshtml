@@ -155,7 +155,10 @@
                 formData.append("customer-password", $("#customer-password").val())
                 formData.append("customer-address", $("#customer-address").val())
                 formData.append("customer-phone", $("#customer-phone").val())
-
+                const promsie = new Promise(function (resolve, reject) {
+                    resolve();
+                    resolve();
+                })
                 $.ajax({
                     type: "POST",
                     url: '@Url.Action("Create")',
@@ -164,15 +167,14 @@
                     contentType: false,
                     processData: false,
                     success: function (data) {
-                        if (data.code === 0) {
-                            localStorage.setItem("Create Customer", data.message)
-                            window.location.reload()
-                        }
-                        
+                        localStorage.setItem("message", JSON.stringify(data))
+                        window.location.reload()
                         $("#create-customer").modal("hide")
                     },
-                    error: function () {
-                        alert("Error while inserting data");
+                    error: function (data) {
+                        localStorage.setItem("message", JSON.stringify(data))
+                        window.location.reload()
+                        $("#create-customer").modal("hide")
                     }
                 });
 
@@ -186,8 +188,6 @@
 
             $(".submit-edit-customer").click(function () {
                 var formData = new FormData();
-                //formData.append("email", $("#email-edit").val())
-                //formData.append("password", $("#pwd-edit").val())
                 const idCustomer = $(this).data("id")
                 const urlAction = '@Url.Action("Edit")'
                 console.log(urlAction + "/" + idCustomer)
@@ -230,13 +230,14 @@
                     contentType: false,
                     processData: false,
                     success: function (data) {
-
-                        localStorage.setItem("Delete", data.Msg)
-                        $("#delete-customer").modal("hide")
+                        localStorage.setItem("message", JSON.stringify(data))
                         window.location.reload()
+                        $("#delete-customer").modal("hide")
                     },
-                    error: function () {
-                        alert("Error while inserting data");
+                    error: function (data) {
+                        localStorage.setItem("message", JSON.stringify(data))
+                        window.location.reload()
+                        $("#delete-customer").modal("hide")
                     }
                 })
             })

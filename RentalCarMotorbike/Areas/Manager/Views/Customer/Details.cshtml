@@ -51,7 +51,10 @@
     </div>
 </div>
 <div>
-    <h2>Details About @Model.CustomerName</h2>
+    @{ 
+
+    <h2>Details about @Model.CustomerName.ToString()</h2>
+    }
     <hr />
     <dl class="table-dl dl-horizontal">
         <dt>
@@ -124,13 +127,14 @@
                     contentType: false,
                     processData: false,
                     success: function (data) {
-
-                        localStorage.setItem("Delete", data.Msg)
+                        localStorage.setItem("message", JSON.stringify(data))
+                        window.location.href = '@Url.Action("Index")'
                         $("#delete-customer").modal("hide")
-
                     },
-                    error: function () {
-                        alert("Error while inserting data");
+                    error: function (data) {
+                        localStorage.setItem("message", JSON.stringify(data))
+                        window.location.reload()
+                        $("#delete-customer").modal("hide")
                     }
                 })
             })
@@ -148,13 +152,14 @@
                     contentType: false,
                     processData: false,
                     success: function (data) {
-
-                        localStorage.setItem("Change Password", data.Msg)
+                        localStorage.setItem("message", JSON.stringify(data))
+                        window.location.reload()
                         $("#change-password").modal("hide")
-
                     },
                     error: function () {
-                        alert("Change Password Failed");
+                        localStorage.setItem("message", JSON.stringify(data))
+                        window.location.reload()
+                        $("#change-password").modal("hide")
                     }
                 })
 
