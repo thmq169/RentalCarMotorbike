@@ -211,30 +211,19 @@
                     contentType: false,
                     processData: false,
                     success: function (data) {
-                        if (data.code === 0) {
-                            localStorage.setItem("Create", data.message)
-                            window.location.reload()
-                        }
+                        localStorage.setItem("message", JSON.stringify(data))
+                        window.location.reload()
                         $("#create-modal").modal("hide")
                     },
                     error: function () {
-                        alert("Error while inserting data");
+                        localStorage.setItem("message", JSON.stringify(data))
+                        window.location.reload()
+                        $("#create-modal").modal("hide")
                     }
                 });
 
 
             })
-
-           @* $(".edit").click(function () {
-                $('#modal-edit').modal('show')
-                $("#vehicle-flat-edit").val($(".dt-vehicle-flat").text())
-                $("#vehicle-name-edit").val($(".dt-vehicle-name").text())
-                    $("#vehicle-model-edit").val($(".dt-vehicle-model").text())
-                    $("#vehicle-price-edit").val($(".dt-vehicle-price").text())
-                    //$("#vehicle-desc-edit").val($(".dt-vehicle-desc").text()
-
-                $('.submit-edit').attr('data-id', $(this).data("id"))
-            })*@
 
             $(".delete").click(function () {
                 $("#vehicleDeleteName").text($(this).data("name"))
@@ -242,41 +231,6 @@
                 $('#modal-delete').modal('show')
                 $('.submitDelete').attr('data-id', $(this).data("id"))
             })
-
-            @*$(".submit-edit").click(function () {
-                const formData = new FormData();
-                formData.append("vehicle-flat-edit", $.trim( $("#vehicle-flat-edit").val()))
-                formData.append("vehicle-name-edit", $.trim($("#vehicle-name-edit").val()))
-                //formData.append("vehicle-model-edit", $.trim($("#vehicle-model-edit").val()))
-                formData.append("vehicle-price-edit", "70000")
-                //formData.append("vehicle-desc-edit", $("#vehicle-desc-edit").val())
-                const idVehicle = $(this).data("id")
-                const urlAction = '@Url.Action("Edit")'
-                console.log(urlAction + "/" + idVehicle)
-                console.log($.trim($("#vehicle-flat-edit").val()))
-                console.log($.trim($("#vehicle-name-edit").val()))
-                //console.log($.trim($("#vehicle-model-edit").val()))
-                console.log($.trim($("#vehicle-price-edit").val()))
-                $.ajax({
-                    type: "POST",
-                    url: urlAction + "/" + idVehicle,
-                    data: formData,
-                    cache: false,
-                    contentType: false,
-                    processData: false,
-                    success: function (data) {
-                        if (data.code === 0) {
-                            localStorage.setItem("Edit", data.message)
-                            window.location.reload()
-                        }
-                        $("#modal-edit").modal("hide")
-
-                    },
-                    error: function () {
-                        alert("Error while inserting data");
-                    }
-                })
-            })*@
 
             $(".submitDelete").click(function () {
 
@@ -291,16 +245,14 @@
                     contentType: false,
                     processData: false,
                     success: function (data) {
-
-                        if (data.code === 0) {
-                            localStorage.setItem("Delete", data.message)
-                            window.location.reload()
-                        }
+                        localStorage.setItem("message", JSON.stringify(data))
+                        window.location.reload()
                         $("#modal-delete").modal("hide")
-
                     },
                     error: function () {
-                        alert("Error while inserting data");
+                        localStorage.setItem("message", JSON.stringify(data))
+                        window.location.reload()
+                        $("#modal-delete").modal("hide")
                     }
                 })
             })

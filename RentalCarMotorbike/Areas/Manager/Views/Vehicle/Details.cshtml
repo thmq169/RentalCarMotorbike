@@ -198,15 +198,15 @@
                     contentType: false,
                     processData: false,
                     success: function (data) {
-                        if (data.code === 0) {
-                            localStorage.setItem("Edit", data.message)
-                            window.location.reload()
-                        }
+                        localStorage.setItem("message", JSON.stringify(data))
+                        window.location.reload()
                         $("#modal-edit").modal("hide")
 
                     },
                     error: function () {
-                        alert("Error while inserting data");
+                        localStorage.setItem("message", JSON.stringify(data))
+                        window.location.reload()
+                        $("#modal-edit").modal("hide")
                     }
                 })
             })
@@ -231,16 +231,15 @@
                     contentType: false,
                     processData: false,
                     success: function (data) {
-
-                        if (data.code === 0) {
-                            localStorage.setItem("Delete", data.message)
-                            $(location).attr("href", "@Url.Action("Index")")
-                        }
+                        localStorage.setItem("message", JSON.stringify(data))
+                        window.location.href = '@Url.Action("Index")'
                         $("#modal-delete").modal("hide")
 
                     },
                     error: function () {
-                        alert("Error while inserting data");
+                        localStorage.setItem("message", JSON.stringify(data))
+                        window.location.href = '@Url.Action("Index")'
+                        $("#modal-delete").modal("hide")
                     }
                 })
             })

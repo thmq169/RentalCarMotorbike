@@ -72,8 +72,8 @@ namespace RentalCarMotorbike.Areas.Manager.Controllers
             {
                 oSqlConnection.Open();
                 SqlCommand cmd = new SqlCommand(Sql, oSqlConnection);
-                
                 SqlCommand commmand = new SqlCommand(sqlSelect, oSqlConnection);
+
                 string idSelect = collection["customer-identity"];
                 commmand.Parameters.AddWithValue("@CustomerID", idSelect);
                 var sqlReader = commmand.ExecuteReader();
@@ -86,7 +86,6 @@ namespace RentalCarMotorbike.Areas.Manager.Controllers
                 {
                     SqlCommand oSqlCommand = new SqlCommand(Sql, oSqlConnection);
                     
-
                     string id = collection["customer-identity"];
                     string name = collection["customer-name"];
                     string email = collection["customer-email"];
@@ -105,10 +104,7 @@ namespace RentalCarMotorbike.Areas.Manager.Controllers
 
                     oSqlConnection.Close();
                     return Json(new { code = 0, message = "Create Customer Success." });
-                }
-                
-                
-            }
+                }            }
         }
 
         // GET: Manager/Customer/Edit/5

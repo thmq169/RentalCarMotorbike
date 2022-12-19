@@ -76,15 +76,25 @@ namespace RentalCarMotorbike.Areas.Manager.Controllers
                                                 "VehicleStatus," +
                                                 "VehicleImage) " +
                          "VALUES (@VehicleID, @VehiclePrice, @VehicleName,@VehicleDescription,@VehicleInventory,@VehicleFlatNumber,@VehicleModel,@VehicleStatus,@VehicleImage)";
-            
+            string sqlSelect = "SELECT * FROM Vehicle WHERE @VehicleID = VehicleID";
             using (SqlConnection oSqlConnection = new SqlConnection(connectionStringDB()))
             {
-                SqlCommand oSqlCommand = new SqlCommand(Sql, oSqlConnection);
-                try
+                oSqlConnection.Open();
+                SqlCommand cmd = new SqlCommand(Sql, oSqlConnection);
+                SqlCommand commmand = new SqlCommand(sqlSelect, oSqlConnection);
+
+                string idSelect = collection["vehicle-flat"];
+                commmand.Parameters.AddWithValue("@VehicleID", idSelect.Replace("-", "").Replace(".", "").Replace(" ", ""));
+                var sqlReader = commmand.ExecuteReader();
+                if (sqlReader.HasRows)
                 {
-                   
-                    oSqlConnection.Open();
-                    SqlCommand cmd = new SqlCommand(Sql, oSqlConnection);
+                    oSqlConnection.Close();
+                    return Json(new { code = 1, message = "Flat Vehicle has been existed." });
+                }
+                else
+                {
+                    SqlCommand oSqlCommand = new SqlCommand(Sql, oSqlConnection);
+
                     string id = collection["vehicle-flat"];
                     string name = collection["vehicle-name"];
                     string flat = id;
@@ -121,20 +131,7 @@ namespace RentalCarMotorbike.Areas.Manager.Controllers
                     oSqlCommand.Parameters.AddWithValue("@VehicleImage", id.ToString() + Path.GetExtension(VehiclePostImage.FileName));
                     oSqlCommand.CommandType = CommandType.Text;
                     oSqlCommand.ExecuteNonQuery();
-
-                    //Response.AddHeader("Refresh", "5");
-                    return Json(new { code = 0, message = "Create Success" });
-                    //return View();
-                }
-                catch (Exception ex)
-                {
-                    return Json(new { Msg = ex.Message });
-                }
-                finally
-                {
-                    oSqlCommand.Dispose();
-                    oSqlConnection.Close();
-                    oSqlConnection.Dispose();
+                    return Json(new { code = 0, message = "Create Vehicle Success" });
                 }
             }
         }
@@ -189,11 +186,11 @@ namespace RentalCarMotorbike.Areas.Manager.Controllers
                     oSqlCommand.CommandType = CommandType.Text;
                     oSqlCommand.ExecuteNonQuery();
 
-                    return Json(new { code = 0, message = "Edit Success" });
+                    return Json(new { code = 0, message = "Edit Vehicle Success" });
                 }
                 catch (Exception ex)
                 {
-                    return Json(new { Msg = ex.Message });
+                    return Json(new { code = 1, message = "Edit Vehicle Failed" });
                 }
                 finally
                 {
@@ -227,11 +224,11 @@ namespace RentalCarMotorbike.Areas.Manager.Controllers
                     oSqlCommand.CommandType = CommandType.Text;
                     oSqlCommand.ExecuteNonQuery();
 
-                    return Json(new { code = 0, message = "Delete Success" });
+                    return Json(new { code = 0, message = "Delete Vehicle Success" });
                 }
                 catch (Exception ex)
                 {
-                    return Json(new { code = 1, message = "Delete Failed" });
+                    return Json(new { code = 1, message = "Delete Vehicle Failed" });
                 }
                 finally
                 {
